@@ -25,20 +25,20 @@ def load_frames_boxes(path):
                 continue
             player_boxes[player_box.player_ID].append(player_box)
 
-        for Player_id,player_boxes in player_boxes.items():
-            player_boxes = player_boxes[5:]
-            player_boxes = player_boxes[:-6]
+        for Player_id,boxes_info  in player_boxes.items():
+            boxes_info  = boxes_info [5:]
+            boxes_info  = boxes_info [:-6]
 
             '''
             Now Mapping Frame_ID into {Boxes in certain frame}
             Frame_12342:[box0,box1,box2,....,box11] 
             Frame_12112:[box0,box1,box2,....,box11] 
             '''
-            for box_info in player_boxes:
-                if player_box.frame_ID not in frame_boxes:
-                    frame_boxes[player_box.frame_ID] = []
+            for box_info in boxes_info:
+                if box_info.frame_ID not in frame_boxes:
+                    frame_boxes[box_info.frame_ID] = []
 
-                frame_boxes[player_box.frame_ID].append(player_box)
+                frame_boxes[box_info.frame_ID].append(box_info)
 
     return frame_boxes
 
