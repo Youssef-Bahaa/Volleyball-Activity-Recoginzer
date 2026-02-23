@@ -14,26 +14,31 @@ def load_frames_boxes(path):
     Player_11:[box0,box1,box2,....,box11]
 
     '''
-    player_boxes = {i:[] for i in range(12)}
+    player_boxes = {i: [] for i in range(12)}
     frame_boxes = {}
 
-
-    with open(path ,'r') as file:
+    with open(path, 'r') as file:
 
         for line in file:
             player_box = BoxInfo(line)
             if player_box.player_ID > 11:
                 continue
-
             player_boxes[player_box.player_ID].append(player_box)
+
+        for Player_id,player_boxes in player_boxes.items():
+            player_boxes = player_boxes[5:]
+            player_boxes = player_boxes[:-6]
 
             '''
             Now Mapping Frame_ID into {Boxes in certain frame}
             Frame_12342:[box0,box1,box2,....,box11] 
             Frame_12112:[box0,box1,box2,....,box11] 
             '''
+            for box_info in player_boxes:
+                if player_box.frame_ID not in frame_boxes:
+                    frame_boxes[player_box.frame_ID] = []
 
-            frame_boxes[player_box.frame_ID].append(player_box)
+                frame_boxes[player_box.frame_ID].append(player_box)
 
     return frame_boxes
 
@@ -87,26 +92,28 @@ def load_video_annot(video_path):
 def load_volleyball_dataset(videos_root, annot_root):
     videos_annot = {}
 
-    for idx , video_dir in enumerate(sorted(os.listdir(videos_root))):
+    for idx, video_dir in enumerate(sorted(os.listdir(videos_root))):
         clips_annot = {}
-        video_dir_path = os.path.join(videos_root,video_dir)
+        video_dir_path = os.path.join(videos_root, video_dir)
         clips = os.listdir(video_dir_path)
-        clips = clips.sort()
+        clips.sort()
         Activities = load_video_annot(video_dir_path)
 
         print(f'Processing Video {video_dir} / {len(os.listdir(videos_root))}')
+        clips = [c for c in sorted(os.listdir(video_dir_path))
+                 if os.path.isdir(os.path.join(video_dir_path, c))]
 
-        for clip_dir in clips :
-            clip_dir_path = os.path.join(video_dir_path,clip_dir)
+        for clip_dir in clips:
+            clip_dir_path = os.path.join(video_dir_path, clip_dir)
 
-            annotation_path = os.path.join(annot_root,video_dir , clip_dir,'annotations.txt')
+            annotation_path = os.path.join(annot_root, video_dir, clip_dir, f'{clip_dir}.txt')
 
             frame_boxes = load_frames_boxes(annotation_path)
             clip_activity = Activities[clip_dir]
 
             clips_annot[clip_dir] = {
-                'category':clip_activity,
-                'frame_boxes_dct':frame_boxes
+                'category': clip_activity,
+                'frame_boxes_dct': frame_boxes
             }
 
         videos_annot[video_dir] = clips_annot
@@ -117,7 +124,7 @@ def load_volleyball_dataset(videos_root, annot_root):
 def save_dataset():
     dataset_root = '/kaggle/input/group-activity-recognition-volleyball'
     videos_path = f'{dataset_root}/videos'
-    annot_path =  f'{dataset_root}/volleyball_tracking_annotations'
+    annot_path =  f'{dataset_root}/volleyball_tracking_annotation'
 
     videos_annot_dct = load_volleyball_dataset(videos_path,annot_path)
 
