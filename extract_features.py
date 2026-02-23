@@ -39,7 +39,7 @@ def prepare_model(image_level = False):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
     model.eval()
-    model = nn.Sequential(*list(model.children())[:-2])
+    model = nn.Sequential(*list(model.children())[:-1])
     return model , preprocess
 
 
@@ -66,8 +66,6 @@ def extract_features(clip_dir_path, annot_file, output_file, model, process, ima
                 dnn_repr = model(processed_images)
                 dnn_repr = dnn_repr.view(1, -1)
                 dnn_repr = dnn_repr.view(len(processed_images), -1)
-
-
 
 
 
