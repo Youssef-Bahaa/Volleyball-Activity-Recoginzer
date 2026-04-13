@@ -40,21 +40,3 @@ class BoxInfo:
 
         cv2.imwrite('file_name',crop)
         print(f'Image Saved : {file_name}')
-
-
-if __name__ == "__main__":
-    with open('anot_sample.txt' , 'r') as f:
-        line = f.readline()
-
-    l = BoxInfo(line)
-    img  = cv2.imread('51725/51715.jpg')
-    #cp = l.crop_from_frame(img)
-    #cp_rec = l.draw_box(cp)
-
-    rec = l.draw_box(img)
-
-    cv2.imshow('imag' , rec)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-    #l.crop_from_frame()
