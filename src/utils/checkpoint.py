@@ -19,7 +19,7 @@ class CheckpointManager:
 
     def save(self, model, optimizer, epoch, val_acc):
         filename = f"epoch_{epoch:02d}_acc{val_acc:.4f}.pth"
-        path = os.path.join(self.save_dir, filename)
+        path = os.path.join(self.save_path, filename)
 
         torch.save({
             'epoch': epoch,
