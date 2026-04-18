@@ -18,7 +18,7 @@ def run_epoch(model, loader, criterion, optimizer, num_classes, is_train, device
     acc_metric = Accuracy(task="multiclass", num_classes=num_classes).to(device)
     f1_metric  = F1Score(task="multiclass", num_classes=num_classes, average="macro").to(device)
 
-    total_loss, total = 0, 0,
+    total_loss, total = 0, 0
     ctx = torch.enable_grad() if is_train else torch.no_grad()
     desc = "  train" if is_train else "  val  "
 
