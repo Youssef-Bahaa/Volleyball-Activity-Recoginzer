@@ -34,9 +34,11 @@ experiment:
   name: "Baseline_B1"
   version: 1
   seed: 42
-  output_dir: "outputs"
-  device: "cuda"
-  checkpoint_path: "best_model.pth"
-  final_model_path: "B1.pth"
+  checkpoints_dir: "checkpoints"
+  logs_dir: "logs"
+  results_dir: "results"
+  checkpoint_path: "checkpoints/best_model.pth"
+  final_model_path: "checkpoints/B1.pth"
   save_interval: 5
+  device: "cuda"
   description: "Single-frame ResNet50 baseline for group activity recognition"
