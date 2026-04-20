@@ -47,6 +47,7 @@ class CheckpointManager:
         """Returns the path of the best checkpoint saved so far."""
         return self.history[0][1] if self.history else None
 
+    @staticmethod
     def load(self, path, model, optimizer = None, device = 'cpu'):
         """
         Loads a checkpoint into model (and optionally optimizer).
