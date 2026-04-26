@@ -2,7 +2,7 @@ import os
 import torch
 from src.utils.logger import get_logger
 
-logger = get_logger("checkpoint", "logs/app.log")
+#logger = get_logger("checkpoint", "logs/app.log")
 
 class CheckpointManager:
     """
@@ -12,23 +12,28 @@ class CheckpointManager:
         ckpt_mgr.save(model, optimizer, epoch=5, val_acc=0.82)
     """
 
-    def __init__(self, save_path, keep_top_k = 3):
+    def __init__(self, save_path, keep_top_k = 3, logger=None):
         self.save_path  = save_path
         self.keep_top_k = keep_top_k
         self.history = []  # List of (val_acc, path)
+        self.logger = logger
+        os.makedirs(save_path, exist_ok=True)
 
-    def save(self, model, optimizer, epoch, val_acc):
-        filename = f"epoch_{epoch:02d}_acc{val_acc:.4f}.pth"
+    def save(self, model, optimizer, epoch, val_acc, early_stopping=None):
+        filename = f"epoch_{epoch:02d}_acc_{val_acc:.4f}.pth"
         path = os.path.join(self.save_path, filename)
 
-        torch.save({
+        state = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
-            'val_acc': val_acc
-        }, path)
+            'val_acc': val_acc}
 
-        logger.info(f"Saved checkpoint: {path}")
+        if early_stopping is not None:
+            state["early_stopping"] = early_stopping.state_dict()
+
+        torch.save(state, path)
+        self.logger.info(f"Saved checkpoint: {path}")
 
         self.history.append((val_acc, path))
         self.history.sort(key=lambda x: x[0] , reverse=True)  # Sort by val_acc descending
@@ -37,10 +42,10 @@ class CheckpointManager:
         for _, old_path in self.history[self.keep_top_k:]:
             if os.path.exists(old_path):
                 os.remove(old_path)
-                logger.info(f'Removed old checkpoint: {old_path}')
+                self.logger.info(f'Removed old checkpoint: {old_path}')
 
         self.history = self.history[:self.keep_top_k]
-        logger.info(f"Checkpoint saved → {path}")
+
         return path
 
     def best_path(self):
@@ -48,23 +53,23 @@ class CheckpointManager:
         return self.history[0][1] if self.history else None
 
     @staticmethod
-    def load(self, path, model, optimizer = None, device = 'cpu'):
+    def load(path, model, optimizer = None, device = 'cpu', early_stopping=None,logger=None):
         """
         Loads a checkpoint into model (and optionally optimizer).
         Returns the checkpoint dict for epoch/val_acc inspection.
         """
         ckpt = torch.load(path, map_location= device)
         state = ckpt.get('model_state_dict' , ckpt)
-        model.load(state)
+        model.load_state_dict(state)
 
-        if optimizer is not None and 'optimizer' in ckpt:
+        if optimizer is not None and 'optimizer_state_dict' in ckpt:
             optimizer.load_state_dict(ckpt["optimizer_state_dict"])
 
+        if early_stopping is not None and "early_stopping" in ckpt:
+            early_stopping.load_state_dict(ckpt["early_stopping"])
 
-        logger.info(
-            f'Loaded Checkpoint: {path}' +
-             f"(epoch={ckpt.get('epoch')}, val_acc={ckpt.get('val_acc', 'n/a')}"
-        )
+        if logger:
+            logger.info(f"Loaded {path} (epoch={ckpt.get('epoch')}, val_acc={ckpt.get('val_acc', 'n/a')})")
 
         return ckpt
 
