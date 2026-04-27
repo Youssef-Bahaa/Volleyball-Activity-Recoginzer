@@ -2,7 +2,8 @@ import torch.nn as nn
 import torch
 import torchvision.models as models
 
-class ResNetFineTune(nn.Module):
+class B3Extractor(nn.Module):
+    """ResNet50 fine-tuned on 9 person actions. Used in Phase 1 training + Phase 2 extraction."""
     def __init__(self, num_classes=9, pretrained=True):
         super().__init__()
 
