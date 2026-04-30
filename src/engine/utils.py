@@ -27,17 +27,45 @@ def set_seed(seed: int):
 def build_optimizer(cfg: dict, model):
     lr = cfg['training']['learning_rate']
     weight_decay = cfg['training'].get('weight_decay', 0.0)
-    return torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    optimizer_name = cfg['training'].get('optimizer', 'Adam')
+
+    if optimizer_name == 'AdamW':
+        return torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    elif optimizer_name == 'Adam':
+        return torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    else:
+        raise ValueError(f"Unknown optimizer: {optimizer_name}")
 
 
 
 def build_scheduler(cfg: dict, optimizer):
-    min_lr = float(cfg['training']['min_lr'])
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode=cfg['training']['scheduler_mode'], factor=cfg['training']['scheduler_factor'],
-        patience=cfg['training']['scheduler_patience'], min_lr=min_lr
-    )
-    return scheduler
+    sched_type = cfg['training']['scheduler']
+
+    if sched_type == "CosineAnnealingLR":
+        return torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer,
+            T_max=cfg['training']['scheduler_T_max'],
+            eta_min=float(cfg['training']['min_lr'])
+        )
+
+    elif sched_type == "ReduceLROnPlateau":
+        return torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode=cfg['training']['scheduler_mode'],
+            factor=cfg['training']['scheduler_factor'],
+            patience=cfg['training']['scheduler_patience'],
+            min_lr=float(cfg['training']['min_lr'])
+        )
+
+    elif sched_type == "StepLR":
+        return torch.optim.lr_scheduler.StepLR(
+            optimizer,
+            step_size=cfg['training']['step_size'],
+            gamma=cfg['training']['gamma']
+        )
+
+    else:
+        raise ValueError(f"Unknown scheduler: {sched_type}")
 
 
 
