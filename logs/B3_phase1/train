@@ -1,0 +1,59 @@
+15:45:18  INFO      [train_B3_phase1]  Device: cuda | Seed: 42
+15:48:39  INFO      [train_B3_phase1]  Device: cuda | Seed: 42
+16:16:34  INFO      [train_B3_phase1]  train loss=0.8734 acc=0.7317 f1=0.3573
+16:16:34  INFO      [train_B3_phase1]  val loss=0.7200 acc=0.7636 f1=0.4856
+16:16:34  INFO      [train_B3_phase1]  lr=1.00e-04
+16:16:35  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_01_acc_0.7636.pth
+16:16:45  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+16:40:13  INFO      [train_B3_phase1]  train loss=0.6234 acc=0.7884 f1=0.5370
+16:40:13  INFO      [train_B3_phase1]  val loss=0.6571 acc=0.7776 f1=0.5228
+16:40:13  INFO      [train_B3_phase1]  lr=1.00e-04
+16:40:13  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_02_acc_0.7776.pth
+16:40:13  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+17:02:44  INFO      [train_B3_phase1]  train loss=0.5505 acc=0.8126 f1=0.5973
+17:02:44  INFO      [train_B3_phase1]  val loss=0.6268 acc=0.7913 f1=0.5584
+17:02:44  INFO      [train_B3_phase1]  lr=1.00e-04
+17:02:44  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_03_acc_0.7913.pth
+17:02:44  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+17:24:45  INFO      [train_B3_phase1]  train loss=0.4969 acc=0.8278 f1=0.6368
+17:24:45  INFO      [train_B3_phase1]  val loss=0.6785 acc=0.7700 f1=0.5482
+17:24:45  INFO      [train_B3_phase1]  lr=1.00e-04
+17:24:45  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_04_acc_0.7700.pth
+17:24:45  INFO      [train_B3_phase1]  Removed old checkpoint: checkpoints\B3_phase1\epoch_01_acc_0.7636.pth
+17:24:46  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+17:45:09  INFO      [train_B3_phase1]  train loss=0.4631 acc=0.8350 f1=0.6510
+17:45:09  INFO      [train_B3_phase1]  val loss=0.6431 acc=0.7926 f1=0.5631
+17:45:09  INFO      [train_B3_phase1]  lr=1.00e-04
+17:45:09  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_05_acc_0.7926.pth
+17:45:09  INFO      [train_B3_phase1]  Removed old checkpoint: checkpoints\B3_phase1\epoch_04_acc_0.7700.pth
+17:45:10  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+18:04:58  INFO      [train_B3_phase1]  train loss=0.4257 acc=0.8487 f1=0.6836
+18:04:58  INFO      [train_B3_phase1]  val loss=0.6802 acc=0.7749 f1=0.5772
+18:04:58  INFO      [train_B3_phase1]  lr=1.00e-04
+18:04:58  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_06_acc_0.7749.pth
+18:04:58  INFO      [train_B3_phase1]  Removed old checkpoint: checkpoints\B3_phase1\epoch_06_acc_0.7749.pth
+18:04:58  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+18:25:09  INFO      [train_B3_phase1]  train loss=0.4030 acc=0.8544 f1=0.7065
+18:25:09  INFO      [train_B3_phase1]  val loss=0.6578 acc=0.7837 f1=0.5676
+18:25:09  INFO      [train_B3_phase1]  lr=5.00e-05
+18:25:09  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_07_acc_0.7837.pth
+18:25:09  INFO      [train_B3_phase1]  Removed old checkpoint: checkpoints\B3_phase1\epoch_02_acc_0.7776.pth
+18:25:09  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+18:44:59  INFO      [train_B3_phase1]  train loss=0.3128 acc=0.8864 f1=0.7806
+18:44:59  INFO      [train_B3_phase1]  val loss=0.6773 acc=0.7860 f1=0.5930
+18:44:59  INFO      [train_B3_phase1]  lr=5.00e-05
+18:45:00  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_08_acc_0.7860.pth
+18:45:00  INFO      [train_B3_phase1]  Removed old checkpoint: checkpoints\B3_phase1\epoch_07_acc_0.7837.pth
+18:45:00  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+19:04:58  INFO      [train_B3_phase1]  train loss=0.2648 acc=0.9042 f1=0.8246
+19:04:58  INFO      [train_B3_phase1]  val loss=0.6951 acc=0.7851 f1=0.6017
+19:04:58  INFO      [train_B3_phase1]  lr=5.00e-05
+19:04:58  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_09_acc_0.7851.pth
+19:04:58  INFO      [train_B3_phase1]  Removed old checkpoint: checkpoints\B3_phase1\epoch_09_acc_0.7851.pth
+19:04:58  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
+19:26:37  INFO      [train_B3_phase1]  train loss=0.2298 acc=0.9176 f1=0.8500
+19:26:37  INFO      [train_B3_phase1]  val loss=0.7400 acc=0.7847 f1=0.5914
+19:26:37  INFO      [train_B3_phase1]  lr=5.00e-05
+19:26:38  INFO      [train_B3_phase1]  Saved checkpoint: checkpoints\B3_phase1\epoch_10_acc_0.7847.pth
+19:26:38  INFO      [train_B3_phase1]  Removed old checkpoint: checkpoints\B3_phase1\epoch_10_acc_0.7847.pth
+19:26:38  INFO      [train_B3_phase1]  Curves : results\B3_phase1\figures\training_curves.png
