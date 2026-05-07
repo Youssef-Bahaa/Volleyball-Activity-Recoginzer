@@ -5,7 +5,8 @@ import cv2
 class BoxInfo:
     def __init__(self,line):
         words = line.split()
-        self.action = words.pop()
+        self.category = words.pop()
+        self.action = self.category
         words = [int(str) for str in words]
 
         self.player_ID = words[0]
@@ -22,7 +23,7 @@ class BoxInfo:
 
     def crop_from_frame(self,img_frame):
         x1, y1, x2, y2 = self.box
-        self.crop = img_frame[y1:y2 , x1:x2 ]
+        self.crop = img_frame.crop((x1, y1, x2, y2))
         return self.crop
 
     def draw_box(self,img_frame):
@@ -40,3 +41,10 @@ class BoxInfo:
 
         cv2.imwrite('file_name',crop)
         print(f'Image Saved : {file_name}')
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        if 'action' not in self.__dict__:
+            self.action = self.__dict__.get('category', 'standing')
+        if 'category' not in self.__dict__:
+            self.category = self.action
