@@ -1,0 +1,35 @@
+21:02:21  INFO      [train_B4]  Device: cuda | Seed: 42
+21:04:45  INFO      [train_B4]  Device: cuda | Seed: 42
+21:32:41  INFO      [train_B4]  train loss=0.4131 acc=0.9061 f1=0.9041
+21:32:41  INFO      [train_B4]  val loss=0.7468 acc=0.7942 f1=0.8051
+21:32:41  INFO      [train_B4]  lr=1.00e-03
+21:32:41  INFO      [train_B4]  Saved checkpoint: checkpoints\B4\epoch_01_acc_0.7942.pth
+21:32:49  INFO      [train_B4]  Curves : results\B4\figures\training_curves.png
+21:53:37  INFO      [train_B4]  train loss=0.1961 acc=0.9438 f1=0.9449
+21:53:37  INFO      [train_B4]  val loss=0.7682 acc=0.8001 f1=0.8081
+21:53:37  INFO      [train_B4]  lr=1.00e-03
+21:53:37  INFO      [train_B4]  Saved checkpoint: checkpoints\B4\epoch_02_acc_0.8001.pth
+21:53:41  INFO      [train_B4]  Curves : results\B4\figures\training_curves.png
+22:19:57  INFO      [train_B4]  train loss=0.1820 acc=0.9442 f1=0.9477
+22:19:57  INFO      [train_B4]  val loss=0.7542 acc=0.7957 f1=0.8092
+22:19:57  INFO      [train_B4]  lr=1.00e-03
+22:19:57  INFO      [train_B4]  Saved checkpoint: checkpoints\B4\epoch_03_acc_0.7957.pth
+22:19:57  INFO      [train_B4]  Curves : results\B4\figures\training_curves.png
+22:58:43  INFO      [train_B4]  train loss=0.1830 acc=0.9461 f1=0.9504
+22:58:43  INFO      [train_B4]  val loss=0.7393 acc=0.8016 f1=0.8116
+22:58:43  INFO      [train_B4]  lr=1.00e-03
+22:58:43  INFO      [train_B4]  Saved checkpoint: checkpoints\B4\epoch_04_acc_0.8016.pth
+22:58:43  INFO      [train_B4]  Removed old checkpoint: checkpoints\B4\epoch_01_acc_0.7942.pth
+22:58:47  INFO      [train_B4]  Curves : results\B4\figures\training_curves.png
+23:22:42  INFO      [train_B4]  train loss=0.1569 acc=0.9549 f1=0.9595
+23:22:42  INFO      [train_B4]  val loss=0.7640 acc=0.7994 f1=0.8127
+23:22:42  INFO      [train_B4]  lr=1.00e-04
+23:22:42  INFO      [train_B4]  Saved checkpoint: checkpoints\B4\epoch_05_acc_0.7994.pth
+23:22:42  INFO      [train_B4]  Removed old checkpoint: checkpoints\B4\epoch_03_acc_0.7957.pth
+23:22:43  INFO      [train_B4]  Curves : results\B4\figures\training_curves.png
+23:44:22  INFO      [train_B4]  train loss=0.1381 acc=0.9596 f1=0.9639
+23:44:22  INFO      [train_B4]  val loss=0.7469 acc=0.8016 f1=0.8140
+23:44:22  INFO      [train_B4]  lr=1.00e-04
+23:44:22  INFO      [train_B4]  Saved checkpoint: checkpoints\B4\epoch_06_acc_0.8016.pth
+23:44:22  INFO      [train_B4]  Removed old checkpoint: checkpoints\B4\epoch_05_acc_0.7994.pth
+23:44:23  INFO      [train_B4]  Curves : results\B4\figures\training_curves.png
