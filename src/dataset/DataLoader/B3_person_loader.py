@@ -8,6 +8,15 @@ from PIL import Image
 from src.dataset.transforms import train_transform, val_transform
 from src.dataset.utils import activity2id, TransformSubset, filter_by_ids, PERSON_ACTION_TO_ID
 from src.dataset.boxinfo import BoxInfo
+import src.dataset.boxinfo as boxinfo_module
+import sys
+
+sys.modules['boxinfo'] = boxinfo_module
+class _Unpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if name == 'BoxInfo':
+            return BoxInfo
+        return super().find_class(module, name)
 
 
 class PersonDataset(Dataset):
@@ -19,7 +28,7 @@ class PersonDataset(Dataset):
         self.samples = []
 
         with open(annot_path, 'rb') as f:
-            data = pickle.load(f)
+            data = _Unpickler(f).load()
 
         for video_id in os.listdir(image_root):
             video_dir = os.path.join(image_root, video_id)
@@ -27,7 +36,7 @@ class PersonDataset(Dataset):
                 continue
 
             for clip in os.listdir(video_dir):
-                clip_dir   = os.path.join(video_dir, clip)
+                clip_dir = os.path.join(video_dir, clip)
                 if not os.path.isdir(clip_dir):
                     continue
 
