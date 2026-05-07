@@ -21,7 +21,9 @@ def get_logger(name, log_file):
     )
 
     # ── stdout handler ──
-    sh = logging.StreamHandler(sys.stdout)
+    sh = logging.StreamHandler(
+        stream=open(sys.stdout.fileno(), mode='w', encoding='utf-8', closefd=False)
+    )
     sh.setLevel(logging.INFO)
     sh.setFormatter(fmt)
     logger.addHandler(sh)
@@ -29,7 +31,7 @@ def get_logger(name, log_file):
     # ── file handler ──
     if log_file:
         os.makedirs(os.path.dirname(log_file), exist_ok=True)
-        fh = logging.FileHandler(log_file)
+        fh = logging.FileHandler(log_file, encoding='utf-8')
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(fmt)
         logger.addHandler(fh)
