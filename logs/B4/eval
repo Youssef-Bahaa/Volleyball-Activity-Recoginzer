@@ -1,0 +1,12 @@
+13:06:19  INFO      [evaluator]  Starting evaluation...
+14:31:23  INFO      [evaluator]  Starting evaluation...
+14:46:42  INFO      [evaluator]  Test  acc=0.8347  f1=0.8453
+14:46:43  INFO      [evaluator]  Confusion Matrix:
+tensor([[163,   2,   8,   9,  43,   0,   1,   0],
+        [  3, 185,   4,   3,   2,  12,   0,   1],
+        [  6,   3, 162,   1,   7,   0,   0,   0],
+        [  3,   5,   0, 154,   0,  10,   0,   1],
+        [ 15,   0,   7,   0, 144,   1,   1,   0],
+        [  1,  42,   1,  11,   1, 134,   1,   1],
+        [  1,   1,   0,   0,   0,   0,  94,   6],
+        [  0,   1,   0,   0,   0,   0,   6,  80]], device='cuda:0')
