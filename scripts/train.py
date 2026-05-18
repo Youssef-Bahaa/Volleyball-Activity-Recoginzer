@@ -139,6 +139,10 @@ def run_train(args, cfg, p, device):
     """Phase 2 — train the main model (on raw imgs or pre-extracted features)."""
     num_classes = cfg['model']['num_classes']
     model = load_model(args.model, num_classes, pretrained=cfg['model']['pretrained'], cfg=cfg).to(device)
+    # ── GPU parallelism ──────────────────────────────────────
+    if device == 'cuda' and torch.cuda.device_count() > 1:
+        model = torch.nn.DataParallel(model)
+
     optimizer = build_optimizer(cfg, model)
     scheduler = build_scheduler(cfg, optimizer)
     train_loader, val_loader, _ = load_loaders(args.model, cfg)
