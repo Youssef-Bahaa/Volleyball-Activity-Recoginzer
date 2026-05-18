@@ -5,8 +5,8 @@ class GroupActivityB5(nn.Module):
     def __init__(self, player_model, num_classes=8):
         super(GroupActivityB5, self).__init__()
 
-        self.resnet50 = player_model.backbone
-        self.lstm = player_model.lstm
+        self.resnet50 = player_model.module.backbone
+        self.lstm = player_model.module.lstm
 
         for param in self.resnet50.parameters():
             param.requires_grad = False
@@ -14,11 +14,13 @@ class GroupActivityB5(nn.Module):
         for param in self.lstm.parameters():
             param.requires_grad = False
 
-        self.pool = nn.AdaptiveMaxPooling((1, 2048))
+        self.pool = nn.AdaptiveMaxPool2d((1, 2048))
 
         self.fc = nn.Sequential(
             nn.Linear(2048, 512),
-            nn.Relu(),
+            nn.BatchNorm1d(512),
+            nn.ReLU(),
+            nn.Dropout(0.5),
             nn.Linear(512, num_classes)
         )
 
