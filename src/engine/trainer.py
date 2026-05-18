@@ -1,7 +1,7 @@
 import torch
 import os
 
-from torch.cuda.amp import GradScaler, autocast
+from torch.amp import GradScaler, autocast
 from tqdm import tqdm
 from torchmetrics import Accuracy, F1Score
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -26,14 +26,14 @@ def run_epoch(model, loader, criterion, num_classes, device, optimizer=None, sca
 
             if is_train:
                 optimizer.zero_grad()
-                with autocast(device_type='cuda', dtype=torch.float16):
+                with autocast('cuda', dtype=torch.float16):
                     outputs = model(imgs)
                     loss = criterion(outputs, labels)
                 scaler.scale(loss).backward()
                 scaler.step(optimizer)
                 scaler.update()
             else:
-                with autocast(device_type='cuda', dtype=torch.float16):
+                with autocast('cuda', dtype=torch.float16):
                     outputs = model(imgs)
                     loss = criterion(outputs, labels)
 
@@ -64,7 +64,7 @@ def train(
     log.info(f"Device: {device} | Seed: {seed}")
     set_seed(seed)
 
-    scaler   = GradScaler()
+    scaler = GradScaler('cuda')
     ckpt_mgr = CheckpointManager(save_path=path.checkpoints, keep_top_k=3, logger=log)
     history  = {k: [] for k in ("train_loss", "val_loss", "train_acc", "val_acc", "train_f1", "val_f1")}
 
