@@ -23,7 +23,7 @@ class Paths:
             dataset_dirs = [d for d in kaggle_input.iterdir() if d.is_dir()]
             if not dataset_dirs:
                 raise FileNotFoundError("No dataset found under /kaggle/input/")
-            dataset_root = dataset_dirs[0]  # takes first dataset attached
+            dataset_root = r'/kaggle/input/datasets/sherif31/group-activity-recognition-volleyball'
 
             self.data   = dataset_root
             self.videos = dataset_root / "videos"
