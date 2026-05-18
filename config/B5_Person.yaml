@@ -6,11 +6,11 @@ model:
   hidden_dim: 512
 
 training:
-  batch_size: 2
+  batch_size: 4
   learning_rate: 0.001
   weight_decay: 0.0001
   epochs: 10
-  optimizer: "Adam"
+  optimizer: "AdamW"
   scheduler: "ReduceLROnPlateau"
   scheduler_mode: "min"
   patience: 10
