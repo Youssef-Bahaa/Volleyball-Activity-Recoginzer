@@ -3,46 +3,145 @@ import importlib
 import torch
 import torch.nn as nn
 
+from src.utils.checkpoint import CheckpointManager
 from src.engine.trainer import train
 from src.utils.paths import Paths
 from src.engine.utils import get_config, set_seed, build_optimizer, build_scheduler
 
+
 LOADER_REGISTRY = {
     "B1": "src.dataset.DataLoader.B1_loader",
-    "B2": "src.dataset.DataLoader.B2_loader",
+    "B3_phase1": "src.dataset.DataLoader.B3_person_loader",
+    "B3": "src.dataset.DataLoader.B3_features_loader",
+    'B4': 'src.dataset.DataLoader.B4_loader',
+    'B5': 'src.dataset.DataLoader.B5_PersonTemp',
+    'B5_GROUP': 'src.dataset.DataLoader.B5_VolleyBallScene',
+    'B6_phase1': 'src.dataset.DataLoader.B3_person_loader',
+    'B6': 'src.dataset.DataLoader.B6_features_loader'
 }
 
 MODEL_REGISTRY = {
-    "B1": ("src.models.B1.B1_model", "ResNetFineTune"),
-    "B2": ("src.models.B2.B2_model", "."),
+    # ── Single phase ───────────────────────────────────────────
+    "B1": {
+        "module": "src.models.B1.B1_model",
+        "class": "ResNetFineTune",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B1_loader",
+    },
 
+    # ── B3 Phase 1: train person-action classifier ─────────────
+    "B3_phase1": {
+        "module": "src.models.B3.B3_extractor",
+        "class": "B3Extractor",
+        "phases": ["train", "extract"],
+        "loader": "src.dataset.DataLoader.B3_person_loader",
+        "extractor_module": "src.models.B3.extractor",
+        "extractor_class": "B3Extractor",
+    },
+
+    # ── B3 train scene model ──
+    "B3": {
+        "module": "src.models.B3.B3_model",
+        "class": "B3Model",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B3_loader",
+    },
+    "B4": {
+        "module": "src.models.B4.B4_model",
+        "class": "B4Model",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B4_loader",
+    },
+    "B5": {
+        "module": "src.models.B5.Person_Temporal",
+        "class": "PersonTemp",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B5_PersonTemp",
+    },
+    "B5_GROUP": {
+        "module": "src.models.B5.Group_Temporal",
+        "class": "GroupActivityB5",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B5_VolleyBallScene",
+    },
+
+    "B6_phase1": {
+        "module": "src.models.B6.extract",
+        "class": "B6Extractor",
+        "phases": ["train", "extract"],
+        "loader": "src.dataset.DataLoader.B3_person_loader",
+    },
+    "B6": {
+        "module": "src.models.B6.B6_Temporal",
+        "class": "Temporal_Group_Classifier",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B6_features_loader",
+    },
 }
+def _import(module_path, class_name):
+    return getattr(importlib.import_module(module_path), class_name)
 
-def load_model(name, nclasses, pretrained= True):
-    module_path, class_name = MODEL_REGISTRY[name]
+def load_extractor(name, num_classes, pretrained=True):
+    info = MODEL_REGISTRY[name]
+    cls  = _import(info["module"], info["class"])      # ← always use "module"/"class"
+    return cls(num_classes=num_classes, pretrained=pretrained)
+
+def load_model(name, nclasses, pretrained=True, cfg=None):
+    model_info = MODEL_REGISTRY[name]
+
+    module_path = model_info["module"]
+    class_name = model_info["class"]
+
     cls = getattr(importlib.import_module(module_path), class_name)
-    return cls(num_classes=nclasses, pretrained=pretrained)
+    if name == "B4":
+        b1_path = Paths('.', model_name='B1').best_checkpoint()
+        return cls(
+            b1_path=b1_path,
+            input_dim=cfg['model']['input_dim'],
+            hidden_dim=cfg['model']['hidden_dim'],
+            num_layers=cfg['model']['num_layers'],
+            num_classes=cfg['model']['num_classes'],
+        )
+    elif name == 'B5_Temporal':
+        # load the person model (stage 1)
+        person_cls = getattr(
+            importlib.import_module("src.models.B5.Person_Temporal"), "PersonTemp"
+        )
+        person_model = person_cls()
+        ckpt_path = Paths('.', model_name='B5').best_checkpoint()
+        CheckpointManager.load(ckpt_path, person_model, device='cpu')
+        return cls(player_model=person_model, num_classes=nclasses)
+
+    return cls()
 
 
 def load_loaders(model_name, cfg):
     module = importlib.import_module(LOADER_REGISTRY[model_name])
     return module.build_loaders(cfg)
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--model", required=True, choices=MODEL_REGISTRY.keys())
-    parser.add_argument("--config", required=True)
-    args = parser.parse_args()
 
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    cfg = get_config(args.config)
-    p = Paths('.', model_name=args.model)
-
+def run_extract(args, cfg, p, device):
+    """Phase 1 — extract and save features to disk."""
     num_classes = cfg['model']['num_classes']
-    model = load_model(args.model, nclasses =num_classes,pretrained= cfg['model']['pretrained']).to(device)
+    extractor = load_extractor(args.model, num_classes, pretrained=True).to(device)
+
+    # load best checkpoint if one exists
+    try:
+        CheckpointManager.load(p.best_checkpoint(), extractor, device=device)
+    except FileNotFoundError:
+        pass  # no checkpoint yet — extract with pretrained weights
+
+    module = importlib.import_module(MODEL_REGISTRY[args.model]["extractor_module"])
+    module.extract_and_save(extractor, device, p, cfg)
+
+
+def run_train(args, cfg, p, device):
+    """Phase 2 — train the main model (on raw imgs or pre-extracted features)."""
+    num_classes = cfg['model']['num_classes']
+    model = load_model(args.model, num_classes, pretrained=cfg['model']['pretrained'], cfg=cfg).to(device)
     optimizer = build_optimizer(cfg, model)
     scheduler = build_scheduler(cfg, optimizer)
-    train_loader, val_loader, _ = load_loaders(model_name=args.model, cfg=cfg)
+    train_loader, val_loader, _ = load_loaders(args.model, cfg)
 
     train(
         model=model,
@@ -58,6 +157,36 @@ def main():
         scheduler=scheduler,
         seed=cfg['experiment']['seed'],
     )
+
+
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", required=True, choices=MODEL_REGISTRY.keys())
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--phase",  choices=["extract", "train", "both"], default="train")
+
+    args = parser.parse_args()
+
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    cfg = get_config(args.config)
+    p = Paths('.', model_name=args.model)
+
+
+    model_phases = MODEL_REGISTRY[args.model]["phases"]
+    if args.phase == "extract":
+        assert "extract" in model_phases, f"{args.model} has no extract phase"
+        run_extract(args, cfg, p, device)
+
+    elif args.phase == "train":
+        run_train(args, cfg, p, device)
+
+    elif args.phase == "both":
+        assert "extract" in model_phases, f"{args.model} has no extract phase"
+        run_extract(args, cfg, p, device)
+        run_train(args, cfg, p, device)
+
 
 
 if __name__ == "__main__":

@@ -9,21 +9,70 @@ from src.engine.utils import get_config
 from src.utils import checkpoint
 from src.engine.evaluator import evaluate
 
+
+
 LOADER_REGISTRY = {
     "B1": "src.dataset.DataLoader.B1_loader",
-    "B2": "src.dataset.DataLoader.B2_loader",
+    "B3_phase1": "src.dataset.DataLoader.B3_person_loader",
+    'B3': 'src.dataset.DataLoader.B3_features_loader',
+    "B4":"src.dataset.DataLoader.B4_loader",
 }
+
 
 MODEL_REGISTRY = {
-    "B1": ("src.models.B1.B1_model", "ResNetFineTune"),
-    "B2": ("src.models.B2.B2_model", "."),
+    # ── Single phase ───────────────────────────────────────────
+    "B1": {
+        "module": "src.models.B1.B1_model",
+        "class": "ResNetFineTune",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B1_loader",
+    },
 
+    # ── B3 Phase 1: train person-action classifier ─────────────
+    "B3_phase1": {
+        "module": "src.models.B3.B3_extractor",
+        "class": "B3Extractor",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B3_person_loader",
+        "loader_fn": "build_person_loaders",
+    },
+
+    # ── B3 Phase 2+3: extract features then train scene model ──
+    "B3": {
+        "module": "src.models.B3.B3_model",
+        "class": "B3Model",
+        "phases": ["extract", "train"],
+        "loader": "src.dataset.DataLoader.B3_loader",
+        "extractor_module": "src.models.B3.B3_extractor",
+        "extractor_class": "B3Extractor",
+        "extractor_ckpt": "checkpoints/B3_phase1",
+    },
+    "B4": {
+        "module": "src.models.B4.B4_model",
+        "class": "B4Model",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B4_loader",
+    },
 }
 
-def load_model(name, nclasses, pretrained= True):
-    module_path, class_name = MODEL_REGISTRY[name]
+def load_model(name, nclasses, cfg=None):
+    entry = MODEL_REGISTRY[name]
+    module_path = entry["module"]
+    class_name = entry["class"]
+
     cls = getattr(importlib.import_module(module_path), class_name)
-    return cls(num_classes=nclasses, pretrained=pretrained)
+
+    if name == "B4":
+        b1_path = Paths('.', model_name='B1').best_checkpoint()
+        return cls(
+            b1_path=b1_path,
+            input_dim=cfg['model']['input_dim'],
+            hidden_dim=cfg['model']['hidden_dim'],
+            num_layers=cfg['model']['num_layers'],
+            num_classes=cfg['model']['num_classes'],
+        )
+
+    return cls(num_classes=nclasses)
 
 
 def load_loaders(model_name, cfg):
@@ -42,20 +91,19 @@ def main():
 
 
     num_classes = cfg['model']['num_classes']
-    model = load_model(args.model, nclasses =num_classes,pretrained= cfg['model']['pretrained']).to(device)
+    model = load_model(args.model, nclasses=num_classes, cfg=cfg).to(device)
     _, _, test_loader = load_loaders(model_name=args.model, cfg=cfg)
     best_model_pth = p.best_checkpoint()
     CheckpointManager.load(best_model_pth, model, device=device)
 
 
-    evaluate(
+    dct = evaluate(
         model,
         test_loader,
         num_classes,
         device,
         p
     )
-
 
 if __name__ == "__main__":
     main()
