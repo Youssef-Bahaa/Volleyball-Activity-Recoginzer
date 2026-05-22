@@ -8,9 +8,11 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 from src.engine.utils import set_seed
 from src.utils.checkpoint import CheckpointManager
+
 from src.utils.logger import get_logger
 from src.utils.metrics import plot_training_curves
 
+from src.utils.EarlyStopping import EarlyStopping
 
 def run_epoch(model, loader, criterion, num_classes, device, optimizer=None, scaler=None):
     is_train = optimizer is not None
@@ -65,6 +67,7 @@ def train(
     scheduler=None,
     seed=42,
     start_epoch=1,
+    patience=None
 ):
     log = get_logger(f"train_{model_name}", path.log("train"))
     log.info(f"Device: {device} | Seed: {seed}")
@@ -72,6 +75,7 @@ def train(
 
     scaler   = GradScaler('cuda', enabled=device == 'cuda')
     ckpt_mgr = CheckpointManager(save_path=path.checkpoints, keep_top_k=3, logger=log)
+    early_stopper = EarlyStopping(patience=patience) if patience is not None else None
     history  = {k: [] for k in ("train_loss", "val_loss", "train_acc", "val_acc", "train_f1", "val_f1")}
 
     for epoch in range(start_epoch, num_epochs + 1):
@@ -98,10 +102,17 @@ def train(
         for key, val in zip(history, (train_loss, val_loss, train_acc, val_acc, train_f1, val_f1)):
             history[key].append(val)
 
-        ckpt_mgr.save(model, optimizer, epoch, val_acc)
-
         curves_path = path.figure("training_curves.png")
         plot_training_curves(history, curves_path)
         log.info(f"Curves : {curves_path}")
+
+        ckpt_mgr.save(model, optimizer, epoch, val_acc, early_stopping=early_stopper)
+
+        # ── Early stopping ───────────────────────────────────
+        if early_stopper:
+            early_stopper(val_loss)
+            if early_stopper.early_stop:
+                log.info(f"Early stopping triggered at epoch {epoch}")
+                break
 
     return history

@@ -158,6 +158,10 @@ def run_train(args, cfg, p, device):
 
     train_loader, val_loader, _ = load_loaders(args.model, cfg)
 
+    patience = (
+        args.patience if args.patience is not None else cfg['training'].get('patience', 5)
+    ) if args.early_stopping else None
+
     train(
         model=model,
         train_loader=train_loader,
@@ -172,6 +176,7 @@ def run_train(args, cfg, p, device):
         scheduler=scheduler,
         seed=cfg['experiment']['seed'],
         start_epoch=start_epoch,
+        patience=patience,
     )
 
 
@@ -183,6 +188,8 @@ def main():
     parser.add_argument("--config", required=True)
     parser.add_argument("--phase",  choices=["extract", "train", "both"], default="train")
     parser.add_argument("--resume", action="store_true", default=False)
+    parser.add_argument("--early-stopping", action="store_true", default=False)
+    parser.add_argument("--patience", type=int, default=None)
 
     args = parser.parse_args()
 
