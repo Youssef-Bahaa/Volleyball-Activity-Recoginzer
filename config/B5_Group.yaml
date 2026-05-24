@@ -13,7 +13,7 @@ training:
   scheduler_mode: "min"
   scheduler_patience: 5
   scheduler_factor: 0.5
-  patience: 10
+  patience: 5
   min_lr: 1e-6
   num_workers: 2
   pin_memory: true
