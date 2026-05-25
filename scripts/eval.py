@@ -87,6 +87,15 @@ def load_model(name, nclasses, cfg=None):
             num_classes=cfg['model']['num_classes'],
         )
 
+    if name == "B5_GROUP":
+        from src.models.B5.Person_Temporal import PersonTemp
+        person_model = PersonTemp(num_classes=cfg['model']['person_num_classes'])
+        person_ckpt = Paths('.', model_name='B5').best_checkpoint()
+        CheckpointManager.load(person_ckpt, person_model, device='cpu')
+        person_model.eval()
+        return cls(num_classes=nclasses, player_model=person_model)
+
+
     return cls(num_classes=nclasses)
 
 
