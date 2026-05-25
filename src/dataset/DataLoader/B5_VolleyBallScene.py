@@ -106,7 +106,7 @@ def build_loaders(cfg):
     test_dataset = filter_by_ids(test_dataset,  data_cfg["video_splits"]["test"])
 
     loader_kwargs = {
-        "batch_size":  training_cfg["batch_size"],
+        "batch_size": training_cfg["batch_size"],
         "num_workers": training_cfg.get("num_workers", 4),
         "pin_memory": training_cfg.get("pin_memory", True),
     }
