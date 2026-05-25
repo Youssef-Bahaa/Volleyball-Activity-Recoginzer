@@ -89,7 +89,7 @@ def load_model(name, nclasses, cfg=None):
 
     if name == "B5_GROUP":
         from src.models.B5.Person_Temporal import PersonTemp
-        person_model = PersonTemp(num_classes=cfg['model']['person_num_classes'])
+        person_model = PersonTemp(num_classes=9)
         person_ckpt = Paths('.', model_name='B5').best_checkpoint()
         CheckpointManager.load(person_ckpt, person_model, device='cpu')
         person_model.eval()
