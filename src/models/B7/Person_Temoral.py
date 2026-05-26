@@ -21,7 +21,11 @@ class PersonTemp(nn.Module):
             nn.BatchNorm1d(512),
             nn.ReLU(),
             nn.Dropout(0.5),
-            nn.Linear(512, num_classes)
+            nn.Linear(512, 256),
+            nn.BatchNorm1d(512),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(256, num_classes)
         )
 
 
@@ -29,7 +33,9 @@ class PersonTemp(nn.Module):
         b, n, t, c, h, w = x.shape
         x = x.view(b * n * t, c, h, w)
         x = self.backbone(x)
+
         x = x.view(b * n, t, -1)
         out, (_, _) = self.lstm(x)
+
         out = out[:, -1, :]
         return self.fc(out)

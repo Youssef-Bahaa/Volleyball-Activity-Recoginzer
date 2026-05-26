@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 
-class GroupActivityB7(nn.Module):
+class GroupActivityB8(nn.Module):
     def __init__(self, player_model, hidden_size = 512, num_classes=8):
-        super(GroupActivityB7, self).__init__()
+        super(GroupActivityB8, self).__init__()
 
         base = player_model.module if hasattr(player_model, 'module') else player_model
 
@@ -16,12 +16,12 @@ class GroupActivityB7(nn.Module):
         for param in self.lstm1.parameters():
             param.requires_grad = False
 
-        self.pool = nn.AdaptiveMaxPool2d((1, 2048))
+        self.pool = nn.AdaptiveMaxPool2d((1, 1024))
 
         self.lstm2 = nn.LSTM(
             input_size=2048,
             hidden_size=hidden_size,
-            num_layers=1,
+            num_layers=2,
             batch_first=True
         )
 
@@ -29,12 +29,12 @@ class GroupActivityB7(nn.Module):
             nn.Linear(2048, 2048),
             nn.BatchNorm1d(2048),
             nn.LeakyReLU(0.1),
-            nn.Dropout(0.7),
+            nn.Dropout(0.5),
 
             nn.Linear(2048, 1024),
             nn.BatchNorm1d(1024),
             nn.LeakyReLU(0.1),
-            nn.Dropout(0.6),
+            nn.Dropout(0.5),
 
             nn.Linear(1024, 512),
             nn.BatchNorm1d(512),
@@ -66,7 +66,13 @@ class GroupActivityB7(nn.Module):
         x = x.contiguous()
 
         x = x.view(b * t, n, -1)
-        x = self.pool(x)
+        team1 = x[:, :6, :]
+        team2 = x[:, 6:, :]
+
+        team1 = self.pool(team1)
+        team2 = self.pool(team2)
+
+        x = torch.cat([team1, team2], dim=1)
 
 
         x = x.view(b, t, -1)
