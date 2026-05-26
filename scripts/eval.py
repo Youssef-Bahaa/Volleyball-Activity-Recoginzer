@@ -18,8 +18,8 @@ LOADER_REGISTRY = {
     'B4': 'src.dataset.DataLoader.B4_loader',
     'B5': 'src.dataset.DataLoader.B5_PersonTemp',
     'B5_GROUP': 'src.dataset.DataLoader.B5_VolleyBallScene',
-    'B6_Person': 'src.dataset.DataLoader.B3_person_loader',
-    'B6_Group': 'src.dataset.DataLoader.B6_features_loader'
+    'B6_Person': 'src.dataset.DataLoader.B6_Person',
+    'B6': 'src.dataset.DataLoader.B6_features_loader'
 }
 
 MODEL_REGISTRY = {
@@ -62,6 +62,14 @@ MODEL_REGISTRY = {
         "phases": ["train"],
         "loader": "src.dataset.DataLoader.B5_PersonTemp",
     },
+
+    "B6_Person": {
+        "module": "src.models.B6.Person",
+        "class": "PersonClassifier",
+        "phases": ["train", "extract"],
+        "loader": "src.dataset.DataLoader.B6_Person",
+    },
+
     "B5_GROUP": {
         "module": "src.models.B5.Group_Temporal",
         "class": "GroupActivityB5",
