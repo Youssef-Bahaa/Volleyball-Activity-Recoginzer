@@ -1,0 +1,146 @@
+09:48:42  INFO      [train_B5_GROUP]  Device: cuda | Seed: 42
+09:48:42  INFO      [train_B5_GROUP]  ── Epoch [1/30] ───────────────
+10:21:27  INFO      [train_B5_GROUP]  train loss=1.4531 acc=0.4586 f1=0.4352
+10:21:27  INFO      [train_B5_GROUP]  val loss=1.0545 acc=0.6257 f1=0.5734
+10:21:27  INFO      [train_B5_GROUP]  lr=1.00e-03
+10:21:28  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+10:21:28  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_01_acc_0.6257.pth
+10:21:28  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+10:21:28  INFO      [train_B5_GROUP]  ── Epoch [2/30] ───────────────
+10:52:53  INFO      [train_B5_GROUP]  train loss=1.2159 acc=0.5414 f1=0.5158
+10:52:53  INFO      [train_B5_GROUP]  val loss=0.9545 acc=0.6435 f1=0.6121
+10:52:53  INFO      [train_B5_GROUP]  lr=1.00e-03
+10:52:54  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+10:52:54  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_02_acc_0.6435.pth
+10:52:54  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+10:52:54  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_01_acc_0.6257.pth
+10:52:54  INFO      [train_B5_GROUP]  ── Epoch [3/30] ───────────────
+11:24:22  INFO      [train_B5_GROUP]  train loss=1.1042 acc=0.5985 f1=0.5781
+11:24:22  INFO      [train_B5_GROUP]  val loss=0.9140 acc=0.6704 f1=0.6463
+11:24:22  INFO      [train_B5_GROUP]  lr=1.00e-03
+11:24:22  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+11:24:22  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_03_acc_0.6704.pth
+11:24:23  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+11:24:23  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_02_acc_0.6435.pth
+11:24:23  INFO      [train_B5_GROUP]  ── Epoch [4/30] ───────────────
+11:55:58  INFO      [train_B5_GROUP]  train loss=1.0561 acc=0.6194 f1=0.5971
+11:55:58  INFO      [train_B5_GROUP]  val loss=0.8454 acc=0.6928 f1=0.6661
+11:55:58  INFO      [train_B5_GROUP]  lr=1.00e-03
+11:55:59  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+11:55:59  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_04_acc_0.6928.pth
+11:55:59  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+11:55:59  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_03_acc_0.6704.pth
+11:55:59  INFO      [train_B5_GROUP]  ── Epoch [5/30] ───────────────
+12:27:24  INFO      [train_B5_GROUP]  train loss=1.0293 acc=0.6269 f1=0.6060
+12:27:24  INFO      [train_B5_GROUP]  val loss=0.7945 acc=0.7069 f1=0.6771
+12:27:24  INFO      [train_B5_GROUP]  lr=1.00e-03
+12:27:24  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+12:27:24  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_05_acc_0.7069.pth
+12:27:25  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+12:27:25  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_04_acc_0.6928.pth
+12:27:25  INFO      [train_B5_GROUP]  ── Epoch [6/30] ───────────────
+12:58:53  INFO      [train_B5_GROUP]  train loss=0.9542 acc=0.6478 f1=0.6238
+12:58:53  INFO      [train_B5_GROUP]  val loss=0.7878 acc=0.7136 f1=0.6840
+12:58:53  INFO      [train_B5_GROUP]  lr=1.00e-03
+12:58:54  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+12:58:54  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_06_acc_0.7136.pth
+12:58:54  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+12:58:54  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_05_acc_0.7069.pth
+12:58:54  INFO      [train_B5_GROUP]  ── Epoch [7/30] ───────────────
+13:30:25  INFO      [train_B5_GROUP]  train loss=0.9357 acc=0.6650 f1=0.6409
+13:30:25  INFO      [train_B5_GROUP]  val loss=0.7450 acc=0.7442 f1=0.6994
+13:30:25  INFO      [train_B5_GROUP]  lr=1.00e-03
+13:30:26  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+13:30:26  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_07_acc_0.7442.pth
+13:30:26  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+13:30:26  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_06_acc_0.7136.pth
+13:30:26  INFO      [train_B5_GROUP]  ── Epoch [8/30] ───────────────
+14:02:04  INFO      [train_B5_GROUP]  train loss=0.9329 acc=0.6664 f1=0.6397
+14:02:04  INFO      [train_B5_GROUP]  val loss=0.7794 acc=0.7248 f1=0.6980
+14:02:04  INFO      [train_B5_GROUP]  lr=1.00e-03
+14:02:04  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+14:02:05  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_08_acc_0.7248.pth
+14:02:05  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+14:02:05  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_08_acc_0.7248.pth
+14:02:05  INFO      [train_B5_GROUP]  ── Epoch [9/30] ───────────────
+14:33:37  INFO      [train_B5_GROUP]  train loss=0.9108 acc=0.6747 f1=0.6481
+14:33:37  INFO      [train_B5_GROUP]  val loss=0.7395 acc=0.7494 f1=0.7144
+14:33:37  INFO      [train_B5_GROUP]  lr=1.00e-03
+14:33:38  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+14:33:38  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_09_acc_0.7494.pth
+14:33:38  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+14:33:38  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_07_acc_0.7442.pth
+14:33:38  INFO      [train_B5_GROUP]  ── Epoch [10/30] ───────────────
+15:05:16  INFO      [train_B5_GROUP]  train loss=0.9388 acc=0.6678 f1=0.6397
+15:05:16  INFO      [train_B5_GROUP]  val loss=0.7860 acc=0.7301 f1=0.6851
+15:05:16  INFO      [train_B5_GROUP]  lr=1.00e-03
+15:05:17  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+15:05:17  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_10_acc_0.7301.pth
+15:05:17  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+15:05:17  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_10_acc_0.7301.pth
+15:05:17  INFO      [train_B5_GROUP]  ── Epoch [11/30] ───────────────
+15:36:49  INFO      [train_B5_GROUP]  train loss=0.9181 acc=0.6701 f1=0.6521
+15:36:49  INFO      [train_B5_GROUP]  val loss=0.7663 acc=0.7241 f1=0.6966
+15:36:49  INFO      [train_B5_GROUP]  lr=1.00e-03
+15:36:50  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+15:36:50  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_11_acc_0.7241.pth
+15:36:50  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+15:36:50  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_11_acc_0.7241.pth
+15:36:50  INFO      [train_B5_GROUP]  ── Epoch [12/30] ───────────────
+16:08:14  INFO      [train_B5_GROUP]  train loss=0.8665 acc=0.6747 f1=0.6423
+16:08:14  INFO      [train_B5_GROUP]  val loss=0.7700 acc=0.7315 f1=0.6982
+16:08:14  INFO      [train_B5_GROUP]  lr=1.00e-03
+16:08:14  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+16:08:15  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_12_acc_0.7315.pth
+16:08:15  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+16:08:15  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_12_acc_0.7315.pth
+16:08:15  INFO      [train_B5_GROUP]  ── Epoch [13/30] ───────────────
+16:39:54  INFO      [train_B5_GROUP]  train loss=0.8350 acc=0.6808 f1=0.6623
+16:39:54  INFO      [train_B5_GROUP]  val loss=0.7076 acc=0.7547 f1=0.7239
+16:39:54  INFO      [train_B5_GROUP]  lr=1.00e-03
+16:39:55  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+16:39:55  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_13_acc_0.7547.pth
+16:39:55  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+16:39:55  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_09_acc_0.7494.pth
+16:39:55  INFO      [train_B5_GROUP]  ── Epoch [14/30] ───────────────
+17:11:29  INFO      [train_B5_GROUP]  train loss=0.8693 acc=0.6938 f1=0.6690
+17:11:29  INFO      [train_B5_GROUP]  val loss=0.7604 acc=0.7211 f1=0.6958
+17:11:29  INFO      [train_B5_GROUP]  lr=1.00e-03
+17:11:30  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+17:11:30  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_14_acc_0.7211.pth
+17:11:30  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+17:11:30  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_14_acc_0.7211.pth
+17:11:30  INFO      [train_B5_GROUP]  ── Epoch [15/30] ───────────────
+17:42:56  INFO      [train_B5_GROUP]  train loss=0.8899 acc=0.6854 f1=0.6679
+17:42:56  INFO      [train_B5_GROUP]  val loss=0.7373 acc=0.7465 f1=0.7195
+17:42:56  INFO      [train_B5_GROUP]  lr=1.00e-03
+17:42:56  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+17:42:57  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_15_acc_0.7465.pth
+17:42:57  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+17:42:57  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_15_acc_0.7465.pth
+17:42:57  INFO      [train_B5_GROUP]  ── Epoch [16/30] ───────────────
+18:14:36  INFO      [train_B5_GROUP]  train loss=0.8712 acc=0.6863 f1=0.6645
+18:14:36  INFO      [train_B5_GROUP]  val loss=0.7712 acc=0.7256 f1=0.6894
+18:14:36  INFO      [train_B5_GROUP]  lr=1.00e-03
+18:14:36  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+18:14:36  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_16_acc_0.7256.pth
+18:14:36  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+18:14:36  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_16_acc_0.7256.pth
+18:14:36  INFO      [train_B5_GROUP]  ── Epoch [17/30] ───────────────
+18:46:39  INFO      [train_B5_GROUP]  train loss=0.8613 acc=0.6984 f1=0.6803
+18:46:39  INFO      [train_B5_GROUP]  val loss=0.7640 acc=0.7353 f1=0.7107
+18:46:39  INFO      [train_B5_GROUP]  lr=1.00e-03
+18:46:39  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+18:46:39  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_17_acc_0.7353.pth
+18:46:40  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+18:46:40  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_17_acc_0.7353.pth
+18:46:40  INFO      [train_B5_GROUP]  ── Epoch [18/30] ───────────────
+19:18:18  INFO      [train_B5_GROUP]  train loss=0.8632 acc=0.6970 f1=0.6827
+19:18:18  INFO      [train_B5_GROUP]  val loss=0.7659 acc=0.7211 f1=0.6907
+19:18:18  INFO      [train_B5_GROUP]  lr=1.00e-03
+19:18:19  INFO      [train_B5_GROUP]  Curves : results/B5_GROUP/figures/training_curves.png
+19:18:19  INFO      [train_B5_GROUP]  Saved checkpoint: checkpoints/B5_GROUP/epoch_18_acc_0.7211.pth
+19:18:19  INFO      [train_B5_GROUP]  Saved last checkpoint: checkpoints/B5_GROUP/last.pth
+19:18:19  INFO      [train_B5_GROUP]  Removed old checkpoint: checkpoints/B5_GROUP/epoch_18_acc_0.7211.pth
+19:18:19  INFO      [train_B5_GROUP]  Early stopping triggered at epoch 18
+19:18:21  INFO      [train_B5_GROUP]  Saved outputs to /kaggle/working/
