@@ -19,7 +19,7 @@ LOADER_REGISTRY = {
     'B6_Person': 'src.dataset.DataLoader.B6_Person',
     'B6': 'src.dataset.DataLoader.B6_features_loader',
     'B7_Person': 'src.dataset.DataLoader.B5_PersonTemp',
-
+    'B8_GROUP': 'src.dataset.DataLoader.B6_Group',
 }
 
 MODEL_REGISTRY = {
@@ -73,7 +73,7 @@ MODEL_REGISTRY = {
         "phases": ["train", "extract"],
         "loader": "src.dataset.DataLoader.B6_Person",
     },
-    "B6": {
+    "B6_Group": {
         "module": "src.models.B6.Group_Temporal",
         "class": "GroupActivityB6",
         "phases": ["train"],
@@ -88,6 +88,12 @@ MODEL_REGISTRY = {
     "B7_Group": {
         "module": "src.models.B7.Group_Temporal",
         "class": "GroupActivityB7",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B6_Group",
+    },
+    "B8_Group": {
+        "module": "src.models.B8.Group_Temporal",
+        "class": "GroupActivityB8",
         "phases": ["train"],
         "loader": "src.dataset.DataLoader.B6_Group",
     },
@@ -123,6 +129,24 @@ def load_model(name, nclasses, pretrained=True, cfg=None):
         )
         person_model = person_cls()
         ckpt_path = Paths('.', model_name='B5').best_checkpoint()
+        CheckpointManager.load(ckpt_path, person_model, device='cpu')
+        return cls(player_model=person_model, num_classes=nclasses)
+
+    elif name == 'B7_Group':
+        person_cls = getattr(
+            importlib.import_module("src.models.B7.Person_Temporal"), "PersonTemp"
+        )
+        person_model = person_cls()
+        ckpt_path = Paths('.', model_name='B7_Person').best_checkpoint()
+        CheckpointManager.load(ckpt_path, person_model, device='cpu')
+        return cls(player_model=person_model, num_classes=nclasses)
+
+    elif name == 'B8_Group':
+        person_cls = getattr(
+            importlib.import_module("src.models.B7.Person_Temporal"), "PersonTemp"
+        )
+        person_model = person_cls()
+        ckpt_path = Paths('.', model_name='B7_Person').best_checkpoint()
         CheckpointManager.load(ckpt_path, person_model, device='cpu')
         return cls(player_model=person_model, num_classes=nclasses)
 

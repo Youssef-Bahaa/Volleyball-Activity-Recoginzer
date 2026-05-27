@@ -26,31 +26,18 @@ class GroupActivityB8(nn.Module):
         )
 
         self.classifier = nn.Sequential(
-            nn.Linear(2048, 2048),
-            nn.BatchNorm1d(2048),
-            nn.LeakyReLU(0.1),
-            nn.Dropout(0.5),
-
-            nn.Linear(2048, 1024),
-            nn.BatchNorm1d(1024),
-            nn.LeakyReLU(0.1),
-            nn.Dropout(0.5),
-
-            nn.Linear(1024, 512),
+            nn.Linear(hidden_size, 512),
             nn.BatchNorm1d(512),
-            nn.LeakyReLU(0.1),
+            nn.ReLU(),
             nn.Dropout(0.5),
-
             nn.Linear(512, 256),
             nn.BatchNorm1d(256),
-            nn.LeakyReLU(0.1),
-            nn.Dropout(0.4),
-
+            nn.ReLU(),
+            nn.Dropout(0.5),
             nn.Linear(256, 128),
             nn.BatchNorm1d(128),
-            nn.LeakyReLU(0.1),
-            nn.Dropout(0.3),
-
+            nn.ReLU(),
+            nn.Dropout(0.5),
             nn.Linear(128, num_classes)
         )
 
@@ -59,7 +46,7 @@ class GroupActivityB8(nn.Module):
         x = x.view(b * n * t, c, h, w)
         x = self.resnet50(x)
 
-        x = x.view(b * t, n, -1)
+        x = x.view(b * n, t, -1)
         out , _ = self.lstm1(x)
 
         x = torch.cat([x, out] , dim=2)
@@ -73,7 +60,6 @@ class GroupActivityB8(nn.Module):
         team2 = self.pool(team2)
 
         x = torch.cat([team1, team2], dim=1)
-
 
         x = x.view(b, t, -1)
         x, (_, _) = self.lstm2(x)

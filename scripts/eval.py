@@ -19,7 +19,9 @@ LOADER_REGISTRY = {
     'B5': 'src.dataset.DataLoader.B5_PersonTemp',
     'B5_GROUP': 'src.dataset.DataLoader.B5_VolleyBallScene',
     'B6_Person': 'src.dataset.DataLoader.B6_Person',
-    'B6': 'src.dataset.DataLoader.B6_features_loader'
+    'B6': 'src.dataset.DataLoader.B6_features_loader',
+    'B7_Person': 'src.dataset.DataLoader.B5_PersonTemp',
+    'B8_GROUP': 'src.dataset.DataLoader.B6_Group',
 }
 
 MODEL_REGISTRY = {
@@ -62,6 +64,12 @@ MODEL_REGISTRY = {
         "phases": ["train"],
         "loader": "src.dataset.DataLoader.B5_PersonTemp",
     },
+    "B5_GROUP": {
+        "module": "src.models.B5.Group_Temporal",
+        "class": "GroupActivityB5",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B5_VolleyBallScene",
+    },
 
     "B6_Person": {
         "module": "src.models.B6.Person",
@@ -69,12 +77,29 @@ MODEL_REGISTRY = {
         "phases": ["train", "extract"],
         "loader": "src.dataset.DataLoader.B6_Person",
     },
-
-    "B5_GROUP": {
-        "module": "src.models.B5.Group_Temporal",
-        "class": "GroupActivityB5",
+    "B6": {
+        "module": "src.models.B6.Group_Temporal",
+        "class": "GroupActivityB6",
         "phases": ["train"],
-        "loader": "src.dataset.DataLoader.B5_VolleyBallScene",
+        "loader": "src.dataset.DataLoader.B6_features_loader",
+    },
+    "B7_Person": {
+        "module": "src.models.B7.Person_Temporal",
+        "class": "PersonTemp",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B5_PersonTemp",
+    },
+    "B7_Group": {
+        "module": "src.models.B7.Group_Temporal",
+        "class": "GroupActivityB7",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B6_Group",
+    },
+    "B8_Group": {
+        "module": "src.models.B8.Group_Temporal",
+        "class": "GroupActivityB8",
+        "phases": ["train"],
+        "loader": "src.dataset.DataLoader.B6_Group",
     },
 }
 
