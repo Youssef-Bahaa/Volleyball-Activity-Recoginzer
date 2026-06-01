@@ -1,0 +1,130 @@
+19:27:03  INFO      [train_B7_Person]  Device: cuda | Seed: 42
+19:27:03  INFO      [train_B7_Person]  ── Epoch [1/20] ───────────────
+19:55:34  INFO      [train_B7_Person]  train loss=0.9771 acc=0.6997 f1=0.2891
+19:55:34  INFO      [train_B7_Person]  val loss=1.0182 acc=0.6703 f1=0.2990
+19:55:34  INFO      [train_B7_Person]  lr=1.00e-03
+19:55:35  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+19:55:35  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_01_acc_0.6703.pth
+19:55:36  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+19:55:36  INFO      [train_B7_Person]  ── Epoch [2/20] ───────────────
+20:23:45  INFO      [train_B7_Person]  train loss=0.7893 acc=0.7380 f1=0.4233
+20:23:45  INFO      [train_B7_Person]  val loss=1.0679 acc=0.6446 f1=0.3530
+20:23:45  INFO      [train_B7_Person]  lr=1.00e-03
+20:23:46  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+20:23:46  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_02_acc_0.6446.pth
+20:23:47  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+20:23:47  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_02_acc_0.6446.pth
+20:23:47  INFO      [train_B7_Person]  ── Epoch [3/20] ───────────────
+20:52:03  INFO      [train_B7_Person]  train loss=0.7225 acc=0.7569 f1=0.4806
+20:52:03  INFO      [train_B7_Person]  val loss=0.7972 acc=0.7429 f1=0.4567
+20:52:03  INFO      [train_B7_Person]  lr=1.00e-03
+20:52:04  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+20:52:04  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_03_acc_0.7429.pth
+20:52:05  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+20:52:05  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_01_acc_0.6703.pth
+20:52:05  INFO      [train_B7_Person]  ── Epoch [4/20] ───────────────
+21:20:20  INFO      [train_B7_Person]  train loss=0.6821 acc=0.7687 f1=0.5164
+21:20:20  INFO      [train_B7_Person]  val loss=0.8019 acc=0.7352 f1=0.4567
+21:20:20  INFO      [train_B7_Person]  lr=1.00e-03
+21:20:20  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+21:20:21  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_04_acc_0.7352.pth
+21:20:22  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+21:20:22  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_04_acc_0.7352.pth
+21:20:22  INFO      [train_B7_Person]  ── Epoch [5/20] ───────────────
+21:48:37  INFO      [train_B7_Person]  train loss=0.6535 acc=0.7785 f1=0.5399
+21:48:37  INFO      [train_B7_Person]  val loss=0.7689 acc=0.7192 f1=0.5067
+21:48:37  INFO      [train_B7_Person]  lr=1.00e-03
+21:48:38  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+21:48:38  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_05_acc_0.7192.pth
+21:48:39  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+21:48:39  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_05_acc_0.7192.pth
+21:48:39  INFO      [train_B7_Person]  ── Epoch [6/20] ───────────────
+22:16:55  INFO      [train_B7_Person]  train loss=0.6273 acc=0.7862 f1=0.5601
+22:16:55  INFO      [train_B7_Person]  val loss=0.6785 acc=0.7756 f1=0.5290
+22:16:55  INFO      [train_B7_Person]  lr=1.00e-03
+22:16:55  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+22:16:56  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_06_acc_0.7756.pth
+22:16:57  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+22:16:57  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_03_acc_0.7429.pth
+22:16:57  INFO      [train_B7_Person]  ── Epoch [7/20] ───────────────
+22:45:16  INFO      [train_B7_Person]  train loss=0.5997 acc=0.7961 f1=0.5867
+22:45:16  INFO      [train_B7_Person]  val loss=0.7271 acc=0.7553 f1=0.5125
+22:45:16  INFO      [train_B7_Person]  lr=1.00e-03
+22:45:17  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+22:45:17  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_07_acc_0.7553.pth
+22:45:18  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+22:45:18  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_07_acc_0.7553.pth
+22:45:18  INFO      [train_B7_Person]  ── Epoch [8/20] ───────────────
+23:13:32  INFO      [train_B7_Person]  train loss=0.5797 acc=0.8055 f1=0.6037
+23:13:32  INFO      [train_B7_Person]  val loss=0.8780 acc=0.6889 f1=0.4918
+23:13:32  INFO      [train_B7_Person]  lr=1.00e-03
+23:13:32  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+23:13:33  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_08_acc_0.6889.pth
+23:13:34  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+23:13:34  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_08_acc_0.6889.pth
+23:13:34  INFO      [train_B7_Person]  ── Epoch [9/20] ───────────────
+23:41:57  INFO      [train_B7_Person]  train loss=0.5612 acc=0.8104 f1=0.6129
+23:41:57  INFO      [train_B7_Person]  val loss=0.6869 acc=0.7593 f1=0.5540
+23:41:57  INFO      [train_B7_Person]  lr=5.00e-04
+23:41:58  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+23:41:58  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_09_acc_0.7593.pth
+23:41:59  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+23:41:59  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_09_acc_0.7593.pth
+23:41:59  INFO      [train_B7_Person]  ── Epoch [10/20] ───────────────
+00:10:24  INFO      [train_B7_Person]  train loss=0.4949 acc=0.8293 f1=0.6514
+00:10:24  INFO      [train_B7_Person]  val loss=0.6107 acc=0.7912 f1=0.5806
+00:10:24  INFO      [train_B7_Person]  lr=5.00e-04
+00:10:24  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+00:10:25  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_10_acc_0.7912.pth
+00:10:25  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+00:10:26  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_06_acc_0.7756.pth
+00:10:26  INFO      [train_B7_Person]  ── Epoch [11/20] ───────────────
+00:38:54  INFO      [train_B7_Person]  train loss=0.4647 acc=0.8388 f1=0.6708
+00:38:54  INFO      [train_B7_Person]  val loss=0.6081 acc=0.7918 f1=0.5982
+00:38:54  INFO      [train_B7_Person]  lr=5.00e-04
+00:38:54  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+00:38:55  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_11_acc_0.7918.pth
+00:38:56  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+00:38:56  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_10_acc_0.7912.pth
+00:38:56  INFO      [train_B7_Person]  ── Epoch [12/20] ───────────────
+01:07:25  INFO      [train_B7_Person]  train loss=0.4459 acc=0.8446 f1=0.6837
+01:07:25  INFO      [train_B7_Person]  val loss=0.6139 acc=0.7929 f1=0.5851
+01:07:25  INFO      [train_B7_Person]  lr=5.00e-04
+01:07:26  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+01:07:26  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_12_acc_0.7929.pth
+01:07:27  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+01:07:27  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_11_acc_0.7918.pth
+01:07:27  INFO      [train_B7_Person]  ── Epoch [13/20] ───────────────
+01:35:48  INFO      [train_B7_Person]  train loss=0.4223 acc=0.8524 f1=0.7001
+01:35:48  INFO      [train_B7_Person]  val loss=0.6506 acc=0.7817 f1=0.5577
+01:35:48  INFO      [train_B7_Person]  lr=5.00e-04
+01:35:48  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+01:35:49  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_13_acc_0.7817.pth
+01:35:50  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+01:35:50  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_13_acc_0.7817.pth
+01:35:50  INFO      [train_B7_Person]  ── Epoch [14/20] ───────────────
+02:04:18  INFO      [train_B7_Person]  train loss=0.4011 acc=0.8585 f1=0.7190
+02:04:18  INFO      [train_B7_Person]  val loss=0.6347 acc=0.7810 f1=0.6012
+02:04:18  INFO      [train_B7_Person]  lr=2.50e-04
+02:04:19  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+02:04:19  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_14_acc_0.7810.pth
+02:04:20  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+02:04:20  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_14_acc_0.7810.pth
+02:04:20  INFO      [train_B7_Person]  ── Epoch [15/20] ───────────────
+02:32:50  INFO      [train_B7_Person]  train loss=0.3346 acc=0.8834 f1=0.7575
+02:32:50  INFO      [train_B7_Person]  val loss=0.6283 acc=0.7897 f1=0.6165
+02:32:50  INFO      [train_B7_Person]  lr=2.50e-04
+02:32:51  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+02:32:51  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_15_acc_0.7897.pth
+02:32:52  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+02:32:52  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_15_acc_0.7897.pth
+02:32:52  INFO      [train_B7_Person]  ── Epoch [16/20] ───────────────
+03:01:12  INFO      [train_B7_Person]  train loss=0.2979 acc=0.8957 f1=0.7925
+03:01:12  INFO      [train_B7_Person]  val loss=0.6689 acc=0.7810 f1=0.5988
+03:01:12  INFO      [train_B7_Person]  lr=2.50e-04
+03:01:12  INFO      [train_B7_Person]  Curves : results/B7_Person/figures/training_curves.png
+03:01:13  INFO      [train_B7_Person]  Saved checkpoint: checkpoints/B7_Person/epoch_16_acc_0.7810.pth
+03:01:14  INFO      [train_B7_Person]  Saved last checkpoint: checkpoints/B7_Person/last.pth
+03:01:14  INFO      [train_B7_Person]  Removed old checkpoint: checkpoints/B7_Person/epoch_16_acc_0.7810.pth
+03:01:14  INFO      [train_B7_Person]  Early stopping triggered at epoch 16
+03:01:16  INFO      [train_B7_Person]  Saved outputs to /kaggle/working/
