@@ -107,7 +107,7 @@ class B6GroupTransformSubset(Dataset):
         return video_tensor, label
 
 
-def build_group_loaders(cfg):
+def build_loaders(cfg):
     data_cfg = cfg["data"]
     training_cfg = cfg["training"]
 
