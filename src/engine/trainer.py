@@ -123,14 +123,14 @@ def train(
         if cfg:
             log_epoch(epoch, train_loss, train_acc, train_f1, val_loss, val_acc, val_f1, lr)
 
-        ckpt_mgr.save(model, optimizer, epoch, val_acc, early_stopping=early_stopper)
 
-        # ── Early stopping ───────────────────────────────────
         if early_stopper:
             early_stopper(val_loss)
-            if early_stopper.early_stop:
-                log.info(f"Early stopping triggered at epoch {epoch}")
-                break
+        ckpt_mgr.save(model, optimizer, epoch, val_acc, scheduler=scheduler, early_stopping=early_stopper, history=history)
+
+        if early_stopper and early_stopper.early_stop:
+            log.info(f"Early stopping triggered at epoch {epoch}")
+            break
 
     # ── MLflow end ────────────────────────────────────────────
     if cfg:

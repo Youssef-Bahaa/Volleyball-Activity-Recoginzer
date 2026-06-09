@@ -27,7 +27,7 @@ class CheckpointManager:
             sd = {k.replace('module.', '', 1): v for k, v in sd.items()}
         return sd
 
-    def save(self, model, optimizer, epoch, val_acc, early_stopping=None):
+    def save(self, model, optimizer, epoch, val_acc, scheduler=None, early_stopping=None, history=None):
         filename = f"epoch_{epoch:02d}_acc_{val_acc:.4f}.pth"
         path = os.path.join(self.save_path, filename)
 
@@ -35,10 +35,10 @@ class CheckpointManager:
             'epoch': epoch,
             'model_state_dict': self._unwrap_state(model),
             'optimizer_state_dict': optimizer.state_dict(),
+            'scheduler_state_dict': scheduler.state_dict() if scheduler is not None else None,
             'val_acc': val_acc,
-            'history': self._training_history,
+            'history': history or {},
         }
-
         if early_stopping is not None:
             state["early_stopping"] = early_stopping.state_dict()
 
