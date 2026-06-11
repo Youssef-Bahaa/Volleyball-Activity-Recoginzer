@@ -202,6 +202,19 @@ def run_train(args, cfg, p, device):
 
     train_loader, val_loader, _ = load_loaders(args.model, cfg)
 
+    all_labels = torch.cat([
+        batch[-1].argmax(1) if batch[-1].dim() > 1 else batch[-1]
+        for batch in train_loader
+    ])
+    class_counts = torch.bincount(all_labels, minlength=num_classes).float()
+    class_weights = len(all_labels) / (num_classes * class_counts)
+    class_weights = (class_weights / class_weights.sum()).to(device)
+
+    criterion = nn.CrossEntropyLoss(
+        weight=class_weights,
+        label_smoothing=cfg['training'].get('label_smoothing', 0.0),
+    )
+
     patience = (
         args.patience if args.patience is not None else cfg['training'].get('patience', 7)
     ) if args.early_stopping else None
@@ -210,7 +223,7 @@ def run_train(args, cfg, p, device):
         model=model,
         train_loader=train_loader,
         val_loader=val_loader,
-        criterion=nn.CrossEntropyLoss(label_smoothing=cfg['training'].get('label_smoothing', 0.01)),
+        criterion=criterion,
         optimizer=optimizer,
         device=device,
         num_classes=num_classes,
