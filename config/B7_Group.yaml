@@ -15,7 +15,7 @@ training:
   scheduler: "CosineAnnealingLR"
   scheduler_mode: "min"
   min_lr: 1e-7
-  T_max: 22
+  scheduler_T_max: 22
   scheduler_factor: 0.3
   scheduler_patience: 3
   num_workers: 4
