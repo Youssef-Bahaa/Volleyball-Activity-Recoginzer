@@ -8,13 +8,14 @@ model:
 training:
   batch_size: 8
   learning_rate: 0.0003
-  weight_decay: 0.05
+  weight_decay: 0.1
   label_smoothing: 0.1
-  epochs: 22
+  epochs: 20
   optimizer: "AdamW"
-  scheduler: "ReduceLROnPlateau"
+  scheduler: "CosineAnnealingLR"
   scheduler_mode: "min"
   min_lr: 1e-7
+  T_max: 22
   scheduler_factor: 0.3
   scheduler_patience: 3
   num_workers: 4
