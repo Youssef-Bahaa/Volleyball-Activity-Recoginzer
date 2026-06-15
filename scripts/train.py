@@ -202,17 +202,24 @@ def run_train(args, cfg, p, device):
 
     train_loader, val_loader, _ = load_loaders(args.model, cfg)
 
-    all_labels = torch.cat([
-        batch[-1].argmax(1) if batch[-1].dim() > 1 else batch[-1]
-        for batch in train_loader
-    ])
-    class_counts = torch.bincount(all_labels, minlength=num_classes).float()
-    class_weights = len(all_labels) / (num_classes * class_counts)
-    class_weights = (class_weights / class_weights.sum()).to(device)
+    GROUP_MODELS = {'B7_Group', 'B8_Group', 'B5_GROUP', 'B6_Group'}
 
-    criterion = nn.CrossEntropyLoss(
-        label_smoothing=cfg['training'].get('label_smoothing', 0.0),
-    )
+    if args.model in GROUP_MODELS:
+        all_labels = torch.cat([
+            batch[-1].argmax(1) if batch[-1].dim() > 1 else batch[-1]
+            for batch in train_loader
+        ])
+        class_counts = torch.bincount(all_labels, minlength=num_classes).float()
+        class_weights = len(all_labels) / (num_classes * class_counts)
+        class_weights = (class_weights / class_weights.sum()).to(device)
+        criterion = nn.CrossEntropyLoss(
+            weight=class_weights,
+            label_smoothing=cfg['training'].get('label_smoothing', 0.0),
+        )
+    else:
+        criterion = nn.CrossEntropyLoss(
+            label_smoothing=cfg['training'].get('label_smoothing', 0.0),
+        )
 
     patience = (
         args.patience if args.patience is not None else cfg['training'].get('patience', 7)
