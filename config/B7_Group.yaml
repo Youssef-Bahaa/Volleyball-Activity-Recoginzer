@@ -8,9 +8,9 @@ model:
 training:
   batch_size: 8
   learning_rate: 0.0003
-  weight_decay: 0.005
-  label_smoothing: 0.15
-  epochs: 42
+  weight_decay: 0.05
+  label_smoothing: 0.1
+  epochs: 22
   optimizer: "AdamW"
   scheduler: "ReduceLROnPlateau"
   scheduler_mode: "min"
