@@ -193,8 +193,6 @@ def run_train(args, cfg, p, device):
             {'params': base_model.layer_norm_input.parameters(),'lr': base_lr},
             {'params': base_model.layer_norm_feat.parameters(), 'lr': base_lr},
             {'params': base_model.layer_norm_pool.parameters(), 'lr': base_lr},
-            {'params': base_model.player_attention.parameters(),'lr': base_lr},
-            {'params': base_model.temporal_attention.parameters(),'lr': base_lr},
             {'params': base_model.classifier.parameters(), 'lr': base_lr},
         ], weight_decay=cfg['training']['weight_decay'])
     else:
