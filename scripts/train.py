@@ -182,7 +182,24 @@ def run_train(args, cfg, p, device):
     if device == 'cuda' and torch.cuda.device_count() > 1:
         model = torch.nn.DataParallel(model)
 
-    optimizer = build_optimizer(cfg, model)
+    if args.model == 'B7_Group':
+        base_lr  = cfg['training']['learning_rate']
+        lstm1_lr = cfg['training'].get('lstm1_lr', 1e-5)
+        base_model = model.module if hasattr(model, 'module') else model
+
+        optimizer = torch.optim.AdamW([
+            {'params': base_model.lstm1.parameters(), 'lr': lstm1_lr},
+            {'params': base_model.lstm2.parameters(), 'lr': base_lr},
+            {'params': base_model.layer_norm_input.parameters(),'lr': base_lr},
+            {'params': base_model.layer_norm_feat.parameters(), 'lr': base_lr},
+            {'params': base_model.layer_norm_pool.parameters(), 'lr': base_lr},
+            {'params': base_model.player_attention.parameters(),'lr': base_lr},
+            {'params': base_model.temporal_attention.parameters(),'lr': base_lr},
+            {'params': base_model.classifier.parameters(), 'lr': base_lr},
+        ], weight_decay=cfg['training']['weight_decay'])
+    else:
+        optimizer = build_optimizer(cfg, model)
+
     scheduler = build_scheduler(cfg, optimizer)
 
     # Resume from checkpoint

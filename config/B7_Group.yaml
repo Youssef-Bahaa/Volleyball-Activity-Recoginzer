@@ -7,17 +7,18 @@ model:
 
 training:
   batch_size: 8
+  lstm1_lr: 0.00001
   learning_rate: 0.0003
-  weight_decay: 0.1
+  weight_decay: 0.05
   label_smoothing: 0.1
-  epochs: 20
+  epochs: 15
   optimizer: "AdamW"
   scheduler: "ReduceLROnPlateau"
   scheduler_mode: "min"
   min_lr: 1e-7
   scheduler_T_max: 22
   scheduler_factor: 0.3
-  scheduler_patience: 3
+  scheduler_patience: 4
   num_workers: 4
   pin_memory: true
 

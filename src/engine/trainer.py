@@ -41,6 +41,8 @@ def run_epoch(model, loader, criterion, num_classes, device, optimizer=None, sca
                     outputs = model(imgs)
                     loss = criterion(outputs, labels)
                 scaler.scale(loss).backward()
+                scaler.unscale_(optimizer)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                 scaler.step(optimizer)
                 scaler.update()
             else:
@@ -108,7 +110,7 @@ def train(
         if scheduler:
             scheduler.step(val_loss) if isinstance(scheduler, ReduceLROnPlateau) else scheduler.step()
 
-        lr = optimizer.param_groups[0]["lr"]
+        lr = optimizer.param_groups[-1]["lr"]
         log.info(f"train loss={train_loss:.4f} acc={train_acc:.4f} macro_f1={train_f1:.4f} weighted_f1={train_f1w:.4f}")
         log.info(f"val loss={val_loss:.4f} acc={val_acc:.4f} macro_f1={val_f1:.4f} weighted_f1={val_f1w:.4f}")
         log.info(f"lr={lr:.2e}")

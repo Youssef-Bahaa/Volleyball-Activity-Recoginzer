@@ -22,13 +22,17 @@ class GroupActivityB7(nn.Module):
         self.layer_norm_feat = nn.LayerNorm(2048 + hidden_size)
         self.layer_norm_pool = nn.LayerNorm(2048 + hidden_size)
 
+        self.pool_drop = nn.Dropout(0.3)
+
         # second LSTM
         self.lstm2 = nn.LSTM(
             input_size=2048 + hidden_size,
             hidden_size=hidden_size,
             num_layers=1,
-            batch_first=True
+            batch_first=True,
         )
+
+        self.lstm2_drop = nn.Dropout(0.4)
 
         # classifier
         self.classifier = nn.Sequential(
@@ -52,7 +56,6 @@ class GroupActivityB7(nn.Module):
         x = self.layer_norm_input(x)
 
         out, _ = self.lstm1(x)
-
         x = torch.cat([x, out], dim=2)  # (2048 + hidden)
         x = self.layer_norm_feat(x)
 
@@ -60,12 +63,12 @@ class GroupActivityB7(nn.Module):
         x = x.permute(0, 2, 1, 3)      # (b, time, players, features)
 
         x = torch.max(x, dim=2)[0]
-
-
         x = self.layer_norm_pool(x)
+        x = self.pool_drop(x)
 
         # ---- LSTM 2 ----
         x, _ = self.lstm2(x)
         x = x[:, -1, :]
+        x = self.lstm2_drop(x)
 
         return self.classifier(x)
