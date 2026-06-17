@@ -278,8 +278,6 @@ All hyperparameters are controlled through YAML files in `config/`. Key paramete
 
 ## Citation
 
-If you use this implementation or the Volleyball Dataset, please cite the original paper:
-
 ```bibtex
 @inproceedings{msibrahiCVPR16deepactivity,
   author    = {Mostafa S. Ibrahim and Srikanth Muralidharan and Zhiwei Deng and Arash Vahdat and Greg Mori},
