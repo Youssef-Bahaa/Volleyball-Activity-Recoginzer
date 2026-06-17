@@ -174,7 +174,7 @@ Volleyball-Activity-Recoginzer/
 |-- logs/                   # Training logs (MLflow runs)
 |-- data/videos_dataset      # Volleyball Dataset (downloaded separately)
 |-- results/                 # Output plots and evaluation artifacts
-|-- docs/                    # Additional documentation
+|-- docs/                    # Orignal Paper
 |-- scripts/                 # Training, evaluation, and dataset download scripts
 |-- Requirements.txt         # Python dependencies
 ```
