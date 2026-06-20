@@ -31,8 +31,8 @@ def build_optimizer(cfg: dict, model):
     base_model = model.module if hasattr(model, 'module') else model
 
     if 'lr_backbone' in cfg['training'] and hasattr(base_model, 'backbone'):
-        lr_backbone = cfg['training']['lr_backbone']
-        lr_head = cfg['training']['lr_head']
+        lr_backbone = float(cfg['training']['lr_backbone'])
+        lr_head = float(cfg['training']['lr_head'])
         param_groups = [
             {'params': [p for i, c in enumerate(base_model.backbone.children())
                         for p in c.parameters() if i >= 6], 'lr': lr_backbone},
@@ -42,7 +42,7 @@ def build_optimizer(cfg: dict, model):
         ]
         default_lr = lr_head
     else:
-        default_lr = cfg['training']['learning_rate']
+        default_lr = float(cfg['training']['learning_rate'])
         param_groups = [{'params': model.parameters(), 'lr': default_lr}]
 
     if optimizer_name == 'AdamW':
