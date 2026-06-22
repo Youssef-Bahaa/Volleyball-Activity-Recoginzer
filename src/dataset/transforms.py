@@ -11,7 +11,7 @@ train_transform = transforms.Compose([
             saturation=0.2, hue=0.05)
     ], p=0.7),
     transforms.RandomGrayscale(p=0.05),
-    transforms.RandomHorizontalFlip(p=0.05),
+    transforms.RandomHorizontalFlip(p=0.5),
     transforms.ToTensor(),
     transforms.Normalize(
         mean=[0.485, 0.456, 0.406],
