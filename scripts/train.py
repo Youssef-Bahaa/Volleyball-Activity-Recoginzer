@@ -155,7 +155,7 @@ def load_model(name, nclasses, pretrained=True, cfg=None):
             importlib.import_module("src.models.B8.Person_Temporal"), "PersonTemp"
         )
         person_model = person_cls()
-        ckpt_path = Paths('.', model_name='B7_Person').best_checkpoint()
+        ckpt_path = Paths('.', model_name='B8_Person').best_checkpoint()
         CheckpointManager.load(ckpt_path, person_model, device='cpu')
         return cls(player_model=person_model, num_classes=nclasses)
 
