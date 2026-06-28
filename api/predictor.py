@@ -179,7 +179,6 @@ class ActionPredictor:
 
             x = x.view(b * n * t, c, h, w)
 
-            x = x.view(b * n * t, c, h, w)
             feats = resnet(x)  # (b*n*t, 2048, 1, 1)
             feats = feats.view(b * n, t, -1)  # (b*n, t, 2048)
             out, _ = lstm1(feats)  # (b*n, t, 512)

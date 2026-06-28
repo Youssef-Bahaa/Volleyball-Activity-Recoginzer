@@ -17,7 +17,7 @@ def load_person_model(device: str) -> PersonTemp:
         p = Paths(str(ROOT), model_name="B8_Person")
         ckpt_path = p.best_checkpoint()
         CheckpointManager.load(ckpt_path, model, device=device)
-        print(r'Person model loaded from path {ckpt_path}')
+        print(f'Person model loaded from path {ckpt_path}')
     except FileNotFoundError:
         print("No Checkpoint Found!")
 
@@ -31,7 +31,7 @@ def load_group_model(person_model: PersonTemp, device: str) -> GroupActivityB8:
         p = Paths(str(ROOT), model_name="B8_Group")
         ckpt_path = p.best_checkpoint()
         CheckpointManager.load(ckpt_path, model, device=device)
-        print(r'Group model loaded from path {ckpt_path}')
+        print(f'Group model loaded from path {ckpt_path}')
     except FileNotFoundError:
         print("No Checkpoint Found!")
 
