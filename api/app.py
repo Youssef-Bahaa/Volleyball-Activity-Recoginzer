@@ -79,6 +79,7 @@ def _process_video(video_path: str) -> list:
 
     SAMPLE_EVERY = 3
     frames = []
+    timestamps = []
     idx = 0
     while True:
         ret, frame = cap.read()
@@ -86,18 +87,18 @@ def _process_video(video_path: str) -> list:
             break
         if idx % SAMPLE_EVERY == 0:
             frames.append(frame)
+            timestamps.append(idx / fps)
         idx += 1
     cap.release()
 
-    effective_fps = fps / SAMPLE_EVERY
     WINDOW = 9
-    STRIDE = int(effective_fps)
-    total = len(frames)
+    STRIDE = max(1, int(fps / SAMPLE_EVERY * 2))
+    total  = len(frames)
 
     if total < WINDOW:
         return []
 
-    timeline = []
+    timeline  = []
     predictor = ActionPredictor(_models, _device)
     last_label = None
 
@@ -112,11 +113,13 @@ def _process_video(video_path: str) -> list:
         if result and result["group_label"] is not None:
             label = result["group_label"]
             if label != last_label:
+                start_sec = timestamps[start]
+                end_sec = timestamps[min(start + WINDOW, len(timestamps) - 1)]
                 timeline.append({
-                    "start": _ts(start, effective_fps),
-                    "end":  _ts(start + WINDOW, effective_fps),
-                    "start_sec": round(start / effective_fps, 2),
-                    "end_sec": round((start + WINDOW) / effective_fps, 2),
+                    "start": _ts_from_sec(start_sec),
+                    "end": _ts_from_sec(end_sec),
+                    "start_sec": round(start_sec, 2),
+                    "end_sec": round(end_sec, 2),
                     "label": label,
                     "confidence": round(result["group_conf"], 3),
                 })
@@ -125,6 +128,11 @@ def _process_video(video_path: str) -> list:
         start += STRIDE
 
     return timeline
+
+
+def _ts_from_sec(sec: float) -> str:
+    s = int(sec)
+    return f"{s // 60}:{s % 60:02d}"
 
 
 def _ts(frame_idx: int, fps: float) -> str:
