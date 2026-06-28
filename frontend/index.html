@@ -1,407 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Volleyball Activity Recognizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg:        #0e0e10;
-    --surface:   #18181b;
-    --surface2:  #222227;
-    --border:    #2e2e34;
-    --text:      #f0f0f2;
-    --muted:     #8b8b99;
-    --accent:    #4f7cff;
-    --accent-bg: #1a2340;
-    --success:   #22c55e;
-    --font:      system-ui, -apple-system, sans-serif;
-    --mono:      'JetBrains Mono', 'Fira Mono', monospace;
-  }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 3rem 1rem;
-  }
-
-  header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-
-  header h1 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--text);
-  }
-
-  header p {
-    margin-top: 0.4rem;
-    font-size: 0.875rem;
-    color: var(--muted);
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.5rem;
-    width: 100%;
-    max-width: 640px;
-    margin-bottom: 1rem;
-  }
-
-  /* ── Drop zone ── */
-  #drop-zone {
-    border: 1.5px dashed var(--border);
-    border-radius: 10px;
-    padding: 2.5rem 1rem;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-  }
-
-  #drop-zone.drag-over {
-    border-color: var(--accent);
-    background: var(--accent-bg);
-  }
-
-  #drop-zone .icon {
-    font-size: 2rem;
-    margin-bottom: 0.75rem;
-    display: block;
-    color: var(--muted);
-  }
-
-  #drop-zone p {
-    font-size: 0.875rem;
-    color: var(--muted);
-  }
-
-  #drop-zone strong {
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  #file-input { display: none; }
-
-  #file-name {
-    margin-top: 1rem;
-    font-size: 0.8rem;
-    color: var(--muted);
-    font-family: var(--mono);
-    min-height: 1.2rem;
-  }
-
-  /* ── Video preview ── */
-  #video-wrap {
-    display: none;
-    margin-top: 1rem;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #000;
-  }
-
-  #preview {
-    width: 100%;
-    max-height: 280px;
-    display: block;
-    object-fit: contain;
-  }
-
-  /* ── Submit button ── */
-  #submit-btn {
-    width: 100%;
-    margin-top: 1.25rem;
-    padding: 0.75rem;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  #submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-  #submit-btn:not(:disabled):hover { opacity: 0.88; }
-
-  /* ── Spinner ── */
-  .spinner {
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: none;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── Results ── */
-  #results { display: none; }
-
-  .result-label {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .result-label .activity {
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    text-transform: uppercase;
-    font-family: var(--mono);
-  }
-
-  .result-label .conf-badge {
-    font-size: 0.8rem;
-    font-weight: 500;
-    background: var(--accent-bg);
-    color: var(--accent);
-    padding: 0.2rem 0.6rem;
-    border-radius: 20px;
-    border: 1px solid rgba(79,124,255,0.25);
-  }
-
-  .section-label {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.75rem;
-  }
-
-  /* ── Bar chart ── */
-  .bar-list { display: flex; flex-direction: column; gap: 0.5rem; }
-
-  .bar-row {
-    display: grid;
-    grid-template-columns: 90px 1fr 44px;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .bar-row .label {
-    font-size: 0.78rem;
-    font-family: var(--mono);
-    color: var(--muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .bar-row .track {
-    height: 6px;
-    background: var(--surface2);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .bar-row .fill {
-    height: 100%;
-    border-radius: 4px;
-    background: var(--accent);
-    transition: width 0.55s cubic-bezier(.22,.68,0,1.2);
-    width: 0%;
-  }
-
-  .bar-row .fill.top { background: var(--success); }
-
-  .bar-row .pct {
-    font-size: 0.75rem;
-    font-family: var(--mono);
-    color: var(--muted);
-    text-align: right;
-  }
-
-  /* ── Divider ── */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 1.25rem 0;
-  }
-
-  /* ── Error ── */
-  #error-msg {
-    display: none;
-    margin-top: 0.75rem;
-    padding: 0.75rem 1rem;
-    background: rgba(239,68,68,0.1);
-    border: 1px solid rgba(239,68,68,0.25);
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: #f87171;
-  }
-
-  /* ── Footer ── */
-  footer {
-    margin-top: 2rem;
-    font-size: 0.75rem;
-    color: var(--muted);
-    text-align: center;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #080c10; --surface: #0f1620; --card: #141e2b;
+  --border: #1e2e40; --left: #3b8eff; --right: #ff5e3b;
+  --neutral: #f0c040; --green: #30d990; --muted: #4a6480;
+  --text: #d8e8f8; --text-dim: #7a98b8;
+  --font-ui: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'Space Mono', monospace; --r: 8px;
+}
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--font-ui); min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; padding: 16px 14px 56px; gap: 14px;
+}
+header {
+  width: 100%; max-width: 900px;
+  display: flex; align-items: center; gap: 12px;
+  padding-bottom: 14px; border-bottom: 1px solid var(--border);
+}
+.logo-mark {
+  width: 38px; height: 38px; border-radius: 9px;
+  background: linear-gradient(135deg, var(--left) 0%, #0040b0 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-family: var(--font-mono);
+  font-weight: 700; color: #fff;
+}
+.header-text h1 { font-size: 16px; font-weight: 700; }
+.header-text p  { font-size: 11px; color: var(--text-dim); font-family: var(--font-mono); margin-top: 2px; }
+.layout {
+  width: 100%; max-width: 900px;
+  display: grid; grid-template-columns: 1fr 300px; gap: 12px;
+}
+@media (max-width: 700px) { .layout { grid-template-columns: 1fr; } }
+.video-card {
+  background: #000; border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden;
+  aspect-ratio: 16/9; display: flex;
+  align-items: center; justify-content: center;
+}
+#preview { width: 100%; height: 100%; display: block; object-fit: contain; }
+.right-col { display: flex; flex-direction: column; gap: 10px; }
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px;
+}
+.eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+  font-family: var(--font-mono); margin-bottom: 10px;
+}
+/* drop zone */
+#drop-zone {
+  border: 1.5px dashed var(--border); border-radius: var(--r);
+  padding: 28px 16px; text-align: center; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+#drop-zone.drag-over { border-color: var(--left); background: rgba(59,142,255,.06); }
+#drop-zone p { font-size: 12px; color: var(--text-dim); }
+#drop-zone strong { color: var(--left); }
+#file-input { display: none; }
+#file-name  { font-size: 11px; color: var(--muted); font-family: var(--font-mono); margin-top: 8px; min-height: 14px; }
+.btn {
+  width: 100%; padding: 10px; border-radius: var(--r); border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: opacity .15s; display: flex;
+  align-items: center; justify-content: center; gap: 8px;
+}
+.btn:disabled { opacity: .35; cursor: not-allowed; }
+.btn-blue { background: var(--left); color: #fff; }
+.spinner {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff; animation: spin .7s linear infinite; display: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+/* activity */
+.activity-display { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.team-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 7px;
+  border-radius: 4px; font-family: var(--font-mono);
+}
+.team-badge.left    { background: rgba(59,142,255,.15); color: var(--left);    border: 1px solid rgba(59,142,255,.3); }
+.team-badge.right   { background: rgba(255,94,59,.15);  color: var(--right);   border: 1px solid rgba(255,94,59,.3);  }
+.team-badge.win     { background: rgba(240,192,64,.15); color: var(--neutral); border: 1px solid rgba(240,192,64,.3); }
+.team-badge.none    { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+#activity-name { font-size: 24px; font-weight: 700; }
+.conf-row { margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+.conf-track { flex: 1; height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
+#conf-fill  { height: 100%; border-radius: 99px; width: 0%; transition: width .3s, background .3s; background: var(--left); }
+#conf-pct   { font-size: 12px; font-family: var(--font-mono); color: var(--text-dim); width: 36px; text-align: right; }
+/* timeline */
+#timeline-wrap {
+  max-height: 320px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.trow {
+  display: grid; grid-template-columns: 76px 90px 1fr 36px;
+  align-items: center; gap: 6px;
+  padding: 5px 6px; border-radius: 5px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background .15s;
+}
+.trow:hover   { background: rgba(59,142,255,.06); }
+.trow.active  { background: rgba(59,142,255,.12); border-color: rgba(59,142,255,.3); }
+.trow .ts     { font-size: 10px; font-family: var(--font-mono); color: var(--muted); }
+.trow .lbl    { font-size: 11px; font-family: var(--font-mono); }
+.trow .bar    { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.trow .bar-fill { height: 100%; border-radius: 99px; transition: width .3s; }
+.trow .pct    { font-size: 10px; font-family: var(--font-mono); color: var(--muted); text-align: right; }
+#error-msg {
+  display: none; padding: 8px 12px; margin-top: 6px;
+  background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.25);
+  border-radius: var(--r); font-size: 12px; color: #f87171;
+}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Volleyball Activity Recognizer</h1>
-  <p>Upload a clip — B8 model predicts the group activity</p>
+  <div class="logo-mark">VAR</div>
+  <div class="header-text">
+    <h1>Volleyball Activity Recognizer</h1>
+    <p>B8_Group · ResNet50 + Dual LSTM · 8 activities</p>
+  </div>
 </header>
 
-<div class="card">
+<div style="width:100%;max-width:900px">
   <div id="drop-zone">
-    <span class="icon">⬆</span>
-    <p>Drop a video here or <strong>click to browse</strong></p>
-    <p style="margin-top:0.3rem; font-size:0.75rem;">MP4 · AVI · MOV · MKV</p>
+    <p>Drop video here or <strong>click to browse</strong></p>
+    <p style="margin-top:4px;font-size:11px">MP4 · AVI · MOV · MKV</p>
   </div>
-  <input type="file" id="file-input" accept=".mp4,.avi,.mov,.mkv">
-
+  <input type="file" id="file-input" accept=".mp4,.avi,.mov,.mkv"/>
   <div id="file-name"></div>
+  <div id="error-msg"></div>
+</div>
 
-  <div id="video-wrap">
+<div class="layout">
+  <!-- video -->
+  <div class="video-card">
     <video id="preview" controls muted playsinline></video>
   </div>
 
-  <div id="error-msg"></div>
+  <!-- right col -->
+  <div class="right-col">
+    <!-- analyse button -->
+    <button class="btn btn-blue" id="submit-btn" disabled>
+      <span class="spinner" id="spinner"></span>
+      <span id="btn-text">Analyse video</span>
+    </button>
 
-  <button id="submit-btn" disabled>
-    <span class="spinner" id="spinner"></span>
-    <span id="btn-text">Analyse clip</span>
-  </button>
-</div>
+    <!-- current activity -->
+    <div class="card">
+      <div class="eyebrow">Current Activity</div>
+      <div class="activity-display">
+        <div class="team-badge none" id="team-badge">--</div>
+        <div id="activity-name">--</div>
+      </div>
+      <div class="conf-row">
+        <div class="conf-track"><div id="conf-fill"></div></div>
+        <div id="conf-pct">--%</div>
+      </div>
+    </div>
 
-<div class="card" id="results">
-  <div class="result-label">
-    <span class="activity" id="res-label">—</span>
-    <span class="conf-badge" id="res-conf">—</span>
+    <!-- timeline -->
+    <div class="card" id="timeline-card" style="display:none">
+      <div class="eyebrow">Timeline</div>
+      <div id="timeline-wrap"></div>
+    </div>
   </div>
-
-  <div class="divider"></div>
-
-  <p class="section-label">Class probabilities</p>
-  <div class="bar-list" id="bar-list"></div>
 </div>
 
-<footer>B8 ResNet50 + LSTM · YOLO player detection · Volleyball dataset</footer>
+<video id="vid" style="display:none" playsinline></video>
 
 <script>
 const API = 'http://localhost:8000';
 
 const dropZone   = document.getElementById('drop-zone');
 const fileInput  = document.getElementById('file-input');
-const fileName   = document.getElementById('file-name');
-const videoWrap  = document.getElementById('video-wrap');
+const fileNameEl = document.getElementById('file-name');
 const preview    = document.getElementById('preview');
 const submitBtn  = document.getElementById('submit-btn');
 const btnText    = document.getElementById('btn-text');
 const spinner    = document.getElementById('spinner');
 const errorMsg   = document.getElementById('error-msg');
-const results    = document.getElementById('results');
-const resLabel   = document.getElementById('res-label');
-const resConf    = document.getElementById('res-conf');
-const barList    = document.getElementById('bar-list');
+const timelineCard = document.getElementById('timeline-card');
+const timelineWrap = document.getElementById('timeline-wrap');
+
+const GROUP_LABELS = {
+  'l-pass':     { team: 'left',  display: 'Pass' },
+  'r-pass':     { team: 'right', display: 'Pass' },
+  'l-spike':    { team: 'left',  display: 'Spike' },
+  'r-spike':    { team: 'right', display: 'Spike' },
+  'l-set':      { team: 'left',  display: 'Set' },
+  'r-set':      { team: 'right', display: 'Set' },
+  'l-winpoint': { team: 'win',   display: 'Win Point' },
+  'r-winpoint': { team: 'win',   display: 'Win Point' },
+};
 
 let selectedFile = null;
+let timeline     = [];
 
-const LABELS = ['l-pass','r-pass','l-spike','r-spike','l-set','r-set','l-winpoint','r-winpoint'];
-
-function showError(msg) {
-  errorMsg.textContent = msg;
-  errorMsg.style.display = 'block';
+function teamColor(team) {
+  return team === 'left' ? 'var(--left)' : team === 'right' ? 'var(--right)' : 'var(--neutral)';
 }
 
-function clearError() {
-  errorMsg.style.display = 'none';
-}
+function showError(msg) { errorMsg.textContent = msg; errorMsg.style.display = 'block'; }
+function clearError()   { errorMsg.style.display = 'none'; }
 
 function setLoading(on) {
-  submitBtn.disabled = on || !selectedFile;
+  submitBtn.disabled  = on || !selectedFile;
   spinner.style.display = on ? 'block' : 'none';
-  btnText.textContent = on ? 'Analysing…' : 'Analyse clip';
+  btnText.textContent = on ? 'Processing…' : 'Analyse video';
 }
 
 function loadFile(file) {
-  if (!file) return;
-  const allowed = ['video/mp4','video/avi','video/quicktime','video/x-msvideo','video/x-matroska'];
-  if (!allowed.some(t => file.type.startsWith('video')) && !file.name.match(/\.(mp4|avi|mov|mkv)$/i)) {
-    showError('Unsupported file type. Use MP4, AVI, MOV, or MKV.');
-    return;
+  if (!file || !file.name.match(/\.(mp4|avi|mov|mkv)$/i)) {
+    showError('Unsupported file type.'); return;
   }
   clearError();
   selectedFile = file;
-  fileName.textContent = file.name;
-
-  const url = URL.createObjectURL(file);
-  preview.src = url;
-  videoWrap.style.display = 'block';
-  results.style.display = 'none';
+  fileNameEl.textContent = file.name;
+  preview.src = URL.createObjectURL(file);
+  timelineCard.style.display = 'none';
+  timelineWrap.innerHTML = '';
+  timeline = [];
   submitBtn.disabled = false;
+  updateActivity(null, 0);
 }
 
-dropZone.addEventListener('click', () => fileInput.click());
+function updateActivity(label, conf) {
+  const info  = label ? (GROUP_LABELS[label] || { team: 'none', display: label }) : null;
+  const badge = document.getElementById('team-badge');
+  const nameEl = document.getElementById('activity-name');
+  const fill  = document.getElementById('conf-fill');
+  const pctEl = document.getElementById('conf-pct');
 
-fileInput.addEventListener('change', e => {
-  if (e.target.files[0]) loadFile(e.target.files[0]);
-});
+  if (!info) {
+    badge.textContent = '--'; badge.className = 'team-badge none';
+    nameEl.textContent = '--';
+    fill.style.width = '0%'; pctEl.textContent = '--%';
+    return;
+  }
+  const pct = Math.round(conf * 100);
+  badge.textContent = info.team === 'win' ? 'WIN' : info.team.toUpperCase();
+  badge.className   = `team-badge ${info.team}`;
+  nameEl.textContent = info.display;
+  fill.style.width    = pct + '%';
+  fill.style.background = teamColor(info.team);
+  pctEl.textContent   = pct + '%';
+}
 
-dropZone.addEventListener('dragover', e => {
-  e.preventDefault();
-  dropZone.classList.add('drag-over');
-});
+function buildTimeline(data) {
+  timeline = data;
+  timelineWrap.innerHTML = '';
 
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  if (!data.length) {
+    timelineWrap.innerHTML = '<p style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">Video too short.</p>';
+    timelineCard.style.display = 'block';
+    return;
+  }
 
-dropZone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropZone.classList.remove('drag-over');
-  if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
-});
+  // dominant label for summary
+  const counts = {};
+  data.forEach(r => counts[r.label] = (counts[r.label] || 0) + 1);
+  const dominant = Object.entries(counts).sort((a,b) => b[1]-a[1])[0][0];
+  updateActivity(dominant, data.find(r => r.label === dominant).confidence);
 
-function buildBars(probs, topLabel) {
-  barList.innerHTML = '';
-  const sorted = Object.entries(probs).sort((a,b) => b[1] - a[1]);
-  sorted.forEach(([label, prob]) => {
-    const pct = (prob * 100).toFixed(1);
-    const isTop = label === topLabel;
-    const row = document.createElement('div');
-    row.className = 'bar-row';
-    row.innerHTML = `
-      <span class="label">${label}</span>
-      <div class="track"><div class="fill${isTop ? ' top' : ''}" data-pct="${prob * 100}"></div></div>
+  data.forEach((row, i) => {
+    const info  = GROUP_LABELS[row.label] || { team: 'none' };
+    const color = teamColor(info.team);
+    const pct   = Math.round(row.confidence * 100);
+
+    const el = document.createElement('div');
+    el.className = 'trow';
+    el.dataset.index = i;
+    el.innerHTML = `
+      <span class="ts">${row.start}–${row.end}</span>
+      <span class="lbl" style="color:${color}">${row.label}</span>
+      <div class="bar"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
       <span class="pct">${pct}%</span>`;
-    barList.appendChild(row);
+
+    el.addEventListener('click', () => {
+      preview.currentTime = row.start_sec;
+      preview.play();
+    });
+
+    timelineWrap.appendChild(el);
   });
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.fill').forEach(el => {
-      el.style.width = el.dataset.pct + '%';
+
+  timelineCard.style.display = 'block';
+  syncTimeline();
+}
+
+function syncTimeline() {
+  preview.addEventListener('timeupdate', () => {
+    const t    = preview.currentTime;
+    const rows = timelineWrap.querySelectorAll('.trow');
+
+    let activeIdx = -1;
+    timeline.forEach((entry, i) => {
+      if (t >= entry.start_sec && t < entry.end_sec) activeIdx = i;
+    });
+
+    rows.forEach((row, i) => {
+      const wasActive = row.classList.contains('active');
+      const isActive  = i === activeIdx;
+      row.classList.toggle('active', isActive);
+
+      if (isActive && !wasActive) {
+        updateActivity(timeline[i].label, timeline[i].confidence);
+        row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
     });
   });
 }
 
+// drag and drop
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => { if (e.target.files[0]) loadFile(e.target.files[0]); });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+});
+
+// submit
 submitBtn.addEventListener('click', async () => {
   if (!selectedFile) return;
-  clearError();
-  setLoading(true);
-  results.style.display = 'none';
+  clearError(); setLoading(true);
+  timelineCard.style.display = 'none';
 
   const form = new FormData();
   form.append('file', selectedFile);
@@ -409,18 +346,13 @@ submitBtn.addEventListener('click', async () => {
   try {
     const res = await fetch(`${API}/predict`, { method: 'POST', body: form });
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ detail: 'Unknown error' }));
-      throw new Error(err.detail || `Server error ${res.status}`);
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `Server error ${res.status}`);
     }
     const data = await res.json();
-
-    resLabel.textContent = data.label;
-    resConf.textContent  = (data.confidence * 100).toFixed(1) + '% confidence';
-    buildBars(data.probabilities, data.label);
-    results.style.display = 'block';
-
-  } catch (e) {
-    showError(e.message || 'Could not reach the API. Is the server running?');
+    buildTimeline(data.timeline);
+  } catch(e) {
+    showError(e.message || 'Could not reach API.');
   } finally {
     setLoading(false);
   }
