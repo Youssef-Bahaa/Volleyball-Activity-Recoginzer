@@ -4,7 +4,7 @@ from src.models.B8.Person_Temporal import PersonTemp
 from src.models.B8.Group_Temporal import GroupActivityB8
 from src.utils.checkpoint import CheckpointManager
 from src.utils.paths import Paths
-
+from pathlib import Path
 
 YOLO_MODEL = "yolov8n.pt"
 YOLO_CONF  = 0.40
@@ -13,7 +13,8 @@ def load_person_model(device: str) -> PersonTemp:
     model = PersonTemp()
 
     try:
-        p = Paths('.', model_name = 'B8_Person')
+        ROOT = Path(__file__).parent.parent
+        p = Paths(str(ROOT), model_name="B8_Person")
         ckpt_path = p.best_checkpoint()
         CheckpointManager.load(ckpt_path, model, device=device)
         print(r'Person model loaded from path {ckpt_path}')
@@ -26,7 +27,8 @@ def load_person_model(device: str) -> PersonTemp:
 def load_group_model(person_model: PersonTemp, device: str) -> GroupActivityB8:
     model = GroupActivityB8(player_model=person_model)
     try:
-        p = Paths('.', model_name = 'B8_Group')
+        ROOT = Path(__file__).parent.parent
+        p = Paths(str(ROOT), model_name="B8_Group")
         ckpt_path = p.best_checkpoint()
         CheckpointManager.load(ckpt_path, model, device=device)
         print(r'Group model loaded from path {ckpt_path}')

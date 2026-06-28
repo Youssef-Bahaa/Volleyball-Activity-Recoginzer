@@ -21,6 +21,8 @@ app.add_middleware(
 )
 
 _device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Device: {_device}")
+
 _models: dict = {}
 
 
