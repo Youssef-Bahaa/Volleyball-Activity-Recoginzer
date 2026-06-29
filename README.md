@@ -374,7 +374,7 @@ curl http://localhost:8000/health
 
  <p align="center">
   <img src="docs/GAR-WEB.png" alt="Volleyball Activity Recognizer web interface" width="900"/>
-  <br><em>The frontend after launch — drop a video clip into the upload zone to run inference.</em>
+  <br><em>The frontend after launch.</em>
 </p>
 
 The HTML frontend is a standalone file — no build step needed. Just open it in your browser:
@@ -388,9 +388,7 @@ start frontend/index.html
 ```
  
 Then upload a `.mp4`, `.avi`, `.mov`, or `.mkv` clip and click **Predict**. The frontend sends the video to `http://localhost:8000/predict` and renders the returned activity timeline.
- 
-> **Note:** The frontend talks to `localhost:8000` by default. If you change the server host or port, update the `API_URL` constant at the top of `frontend/index.html` to match.
- 
+  
 ### API reference
  
 | Endpoint | Method | Description |
