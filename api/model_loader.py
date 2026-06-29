@@ -6,7 +6,7 @@ from src.utils.checkpoint import CheckpointManager
 from src.utils.paths import Paths
 from pathlib import Path
 
-YOLO_MODEL = "yolov8n.pt"
+YOLO_MODEL = "yolov8m.pt"
 YOLO_CONF  = 0.40
 
 def load_person_model(device: str) -> PersonTemp:

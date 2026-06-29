@@ -113,7 +113,8 @@ class ActionPredictor:
 
     def _detect_and_crop(self, frame_bgr: np.ndarray):
         h, w = frame_bgr.shape[:2]
-        results = self.yolo(frame_bgr, conf=YOLO_CONF, verbose=False)
+        results = self.yolo.track(frame_bgr, conf=0.20, iou=0.45, tracker="bytetrack.yaml", persist=True, verbose=False)
+
 
         persons = []
         raw_dets = []
