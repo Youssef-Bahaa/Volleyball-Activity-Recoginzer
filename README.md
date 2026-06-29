@@ -302,6 +302,8 @@ mlflow ui
 
 ---
 
+
+
 ## Configuration
 
 All hyperparameters are controlled through YAML files in `config/`. Key parameters:
@@ -319,6 +321,102 @@ All hyperparameters are controlled through YAML files in `config/`. Key paramete
 | `scheduler`        | LR scheduler type (`ReduceLROnPlateau`)   |
 
 ---
+
+## Running the Web App
+ 
+The repository ships with a FastAPI inference server and an HTML frontend. Upload any volleyball video clip and get back a per-frame activity timeline with confidence scores.
+ 
+### How it works
+ 
+```
+Browser (HTML frontend)
+        |  POST /predict  (multipart video upload)
+        v
+FastAPI server  (api/app.py)
+        |
+        ├── YOLO  →  detect & crop players per frame
+        └── B8 Person + B8 Group  →  sliding-window activity prediction
+        |
+        v
+JSON response  { frames: [{timestamp, group_label, group_conf, player_count}, …] }
+        |
+        v
+Browser renders activity timeline + per-frame labels
+```
+ 
+### Prerequisites
+ 
+Make sure the two trained checkpoints exist before starting the server:
+ 
+```
+checkpoints/
+    B8_Person/  best.pt
+    B8_Group/   best.pt
+```
+ 
+If you haven't trained yet, follow the [Training](#training) section first.
+ 
+### Start the backend
+ 
+```bash
+# from the repo root
+uvicorn api.app:app --host 0.0.0.0 --port 8000
+```
+ 
+The server starts on `http://localhost:8000`. Verify it's healthy:
+ 
+```bash
+curl http://localhost:8000/health
+# {"status":"ok","device":"cuda","models":{"B8_Group":"loaded","YOLO":"loaded"}}
+```
+ 
+### Open the frontend
+ 
+The HTML frontend is a standalone file — no build step needed. Just open it in your browser:
+ 
+```bash
+# Linux
+xdg-open frontend/index.html
+ 
+# Windows
+start frontend/index.html
+```
+ 
+Then upload a `.mp4`, `.avi`, `.mov`, or `.mkv` clip and click **Predict**. The frontend sends the video to `http://localhost:8000/predict` and renders the returned activity timeline.
+ 
+> **Note:** The frontend talks to `localhost:8000` by default. If you change the server host or port, update the `API_URL` constant at the top of `frontend/index.html` to match.
+ 
+### API reference
+ 
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | `GET` | Returns server status and model load state |
+| `/predict` | `POST` | Accepts a video file; returns per-frame predictions |
+ 
+**`POST /predict` — request**
+ 
+```
+Content-Type: multipart/form-data
+Body: file=<video file>   (.mp4 / .avi / .mov / .mkv)
+```
+ 
+**`POST /predict` — response**
+ 
+```json
+{
+  "effective_fps": 10.0,
+  "frames": [
+    {
+      "frame_idx": 0,
+      "timestamp": 0.0,
+      "group_label": "Right Set",
+      "group_conf": 0.94,
+      "player_count": 6
+    },
+    ...
+  ]
+}
+```
 
 ## Citation
 
