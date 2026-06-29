@@ -371,7 +371,12 @@ curl http://localhost:8000/health
 ```
  
 ### Open the frontend
- 
+
+ <p align="center">
+  <img src="docs/GAR-WEB.png" alt="Volleyball Activity Recognizer web interface" width="900"/>
+  <br><em>The frontend after launch — drop a video clip into the upload zone to run inference.</em>
+</p>
+
 The HTML frontend is a standalone file — no build step needed. Just open it in your browser:
  
 ```bash
