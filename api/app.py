@@ -63,8 +63,8 @@ async def predict(file: UploadFile = File(...)):
         with open(video_path, 'wb') as f:
             f.write(await file.read())
 
-        timeline = _process_video(str(video_path))
-        return JSONResponse({"timeline": timeline})
+        result = _process_video(str(video_path))
+        return JSONResponse(result)
 
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
@@ -73,7 +73,7 @@ async def predict(file: UploadFile = File(...)):
         shutil.rmtree(clip_dir, ignore_errors=True)
 
 
-def _process_video(video_path: str) -> list:
+def _process_video(video_path: str) -> dict:
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
 
@@ -91,17 +91,40 @@ def _process_video(video_path: str) -> list:
         idx += 1
     cap.release()
 
+    # The effective fps after sampling — used by the frontend to map
+    # currentTime → frame index: frameIdx = Math.floor(currentTime * effective_fps)
+    effective_fps = fps / SAMPLE_EVERY
+
     WINDOW = 9
     STRIDE = max(1, int(fps / SAMPLE_EVERY * 2))
-    total  = len(frames)
+    total = len(frames)
 
     if total < WINDOW:
-        return []
+        return {"timeline": [], "frames": [], "effective_fps": effective_fps}
 
-    timeline  = []
-    predictor = ActionPredictor(_models, _device)
+    timeline   = []
+    frames_out = []          # ← per-frame data for the canvas overlay
+    predictor  = ActionPredictor(_models, _device)
     last_label = None
 
+    # ── Pass 1: run every frame through the predictor to fill buffers
+    # and collect per-frame detections + predictions.
+    for i, (frame, ts) in enumerate(zip(frames, timestamps)):
+        result = predictor.push_frame(frame)
+
+        frames_out.append({
+            "frame_idx": i,
+            "timestamp": round(ts, 3),
+            "group_label":result.get("group_label"),
+            "group_conf": result.get("group_conf"),
+            # detections: list of {label, confidence, box:[x1,y1,x2,y2]}
+            "detections": result.get("detections", []),
+            # persons: list of {player_id, action_label, confidence}
+            "persons": result.get("persons", []),
+        })
+
+    # ── Pass 2: build coarse timeline from sliding windows
+    predictor.reset()
     start = 0
     while start + WINDOW <= total:
         predictor.reset()
@@ -117,9 +140,9 @@ def _process_video(video_path: str) -> list:
                 end_sec = timestamps[min(start + WINDOW, len(timestamps) - 1)]
                 timeline.append({
                     "start": _ts_from_sec(start_sec),
-                    "end": _ts_from_sec(end_sec),
+                    "end":  _ts_from_sec(end_sec),
                     "start_sec": round(start_sec, 2),
-                    "end_sec": round(end_sec, 2),
+                    "end_sec":round(end_sec, 2),
                     "label": label,
                     "confidence": round(result["group_conf"], 3),
                 })
@@ -127,16 +150,15 @@ def _process_video(video_path: str) -> list:
 
         start += STRIDE
 
-    return timeline
+    return {
+        "timeline": timeline,
+        "frames": frames_out,
+        "effective_fps": round(effective_fps, 4),
+    }
 
 
 def _ts_from_sec(sec: float) -> str:
     s = int(sec)
-    return f"{s // 60}:{s % 60:02d}"
-
-
-def _ts(frame_idx: int, fps: float) -> str:
-    s = int(frame_idx / fps)
     return f"{s // 60}:{s % 60:02d}"
 
 

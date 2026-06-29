@@ -1,362 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Volleyball Activity Recognizer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #080c10; --surface: #0f1620; --card: #141e2b;
-  --border: #1e2e40; --left: #3b8eff; --right: #ff5e3b;
-  --neutral: #f0c040; --green: #30d990; --muted: #4a6480;
-  --text: #d8e8f8; --text-dim: #7a98b8;
-  --font-ui: 'Space Grotesk', system-ui, sans-serif;
-  --font-mono: 'Space Mono', monospace; --r: 8px;
-}
-body {
-  background: var(--bg); color: var(--text);
-  font-family: var(--font-ui); min-height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; padding: 16px 14px 56px; gap: 14px;
-}
-header {
-  width: 100%; max-width: 900px;
-  display: flex; align-items: center; gap: 12px;
-  padding-bottom: 14px; border-bottom: 1px solid var(--border);
-}
-.logo-mark {
-  width: 38px; height: 38px; border-radius: 9px;
-  background: linear-gradient(135deg, var(--left) 0%, #0040b0 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-family: var(--font-mono);
-  font-weight: 700; color: #fff;
-}
-.header-text h1 { font-size: 16px; font-weight: 700; }
-.header-text p  { font-size: 11px; color: var(--text-dim); font-family: var(--font-mono); margin-top: 2px; }
-.layout {
-  width: 100%; max-width: 900px;
-  display: grid; grid-template-columns: 1fr 300px; gap: 12px;
-}
-@media (max-width: 700px) { .layout { grid-template-columns: 1fr; } }
-.video-card {
-  background: #000; border: 1px solid var(--border);
-  border-radius: var(--r); overflow: hidden;
-  aspect-ratio: 16/9; display: flex;
-  align-items: center; justify-content: center;
-}
-#preview { width: 100%; height: 100%; display: block; object-fit: contain; }
-.right-col { display: flex; flex-direction: column; gap: 10px; }
-.card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 14px;
-}
-.eyebrow {
-  font-size: 10px; font-weight: 700; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--muted);
-  font-family: var(--font-mono); margin-bottom: 10px;
-}
-/* drop zone */
-#drop-zone {
-  border: 1.5px dashed var(--border); border-radius: var(--r);
-  padding: 28px 16px; text-align: center; cursor: pointer;
-  transition: border-color .15s, background .15s;
-}
-#drop-zone.drag-over { border-color: var(--left); background: rgba(59,142,255,.06); }
-#drop-zone p { font-size: 12px; color: var(--text-dim); }
-#drop-zone strong { color: var(--left); }
-#file-input { display: none; }
-#file-name  { font-size: 11px; color: var(--muted); font-family: var(--font-mono); margin-top: 8px; min-height: 14px; }
-.btn {
-  width: 100%; padding: 10px; border-radius: var(--r); border: none;
-  font-size: 13px; font-weight: 600; cursor: pointer;
-  transition: opacity .15s; display: flex;
-  align-items: center; justify-content: center; gap: 8px;
-}
-.btn:disabled { opacity: .35; cursor: not-allowed; }
-.btn-blue { background: var(--left); color: #fff; }
-.spinner {
-  width: 14px; height: 14px; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,.3);
-  border-top-color: #fff; animation: spin .7s linear infinite; display: none;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-/* activity */
-.activity-display { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.team-badge {
-  font-size: 10px; font-weight: 700; padding: 2px 7px;
-  border-radius: 4px; font-family: var(--font-mono);
-}
-.team-badge.left    { background: rgba(59,142,255,.15); color: var(--left);    border: 1px solid rgba(59,142,255,.3); }
-.team-badge.right   { background: rgba(255,94,59,.15);  color: var(--right);   border: 1px solid rgba(255,94,59,.3);  }
-.team-badge.win     { background: rgba(240,192,64,.15); color: var(--neutral); border: 1px solid rgba(240,192,64,.3); }
-.team-badge.none    { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
-#activity-name { font-size: 24px; font-weight: 700; }
-.conf-row { margin-top: 10px; display: flex; align-items: center; gap: 8px; }
-.conf-track { flex: 1; height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
-#conf-fill  { height: 100%; border-radius: 99px; width: 0%; transition: width .3s, background .3s; background: var(--left); }
-#conf-pct   { font-size: 12px; font-family: var(--font-mono); color: var(--text-dim); width: 36px; text-align: right; }
-/* timeline */
-#timeline-wrap {
-  max-height: 320px; overflow-y: auto;
-  display: flex; flex-direction: column; gap: 2px;
-}
-.trow {
-  display: grid; grid-template-columns: 76px 90px 1fr 36px;
-  align-items: center; gap: 6px;
-  padding: 5px 6px; border-radius: 5px;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer; transition: background .15s;
-}
-.trow:hover   { background: rgba(59,142,255,.06); }
-.trow.active  { background: rgba(59,142,255,.12); border-color: rgba(59,142,255,.3); }
-.trow .ts     { font-size: 10px; font-family: var(--font-mono); color: var(--muted); }
-.trow .lbl    { font-size: 11px; font-family: var(--font-mono); }
-.trow .bar    { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
-.trow .bar-fill { height: 100%; border-radius: 99px; transition: width .3s; }
-.trow .pct    { font-size: 10px; font-family: var(--font-mono); color: var(--muted); text-align: right; }
-#error-msg {
-  display: none; padding: 8px 12px; margin-top: 6px;
-  background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.25);
-  border-radius: var(--r); font-size: 12px; color: #f87171;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volleyball detector</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #0f0f0f; color: #fff; padding: 1.5rem; }
+
+    h1 { font-size: 1.1rem; font-weight: 500; margin-bottom: 1.25rem; color: #ccc; }
+
+    #upload-zone {
+      border: 2px dashed #444; border-radius: 12px;
+      padding: 3rem 2rem; text-align: center; cursor: pointer;
+      transition: border-color .2s;
+    }
+    #upload-zone:hover { border-color: #888; }
+    #upload-zone p { color: #888; font-size: 0.9rem; margin-top: .5rem; }
+
+    #player-wrap { display: none; }
+
+    .video-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    video {
+      display: block;
+      width: 100%;
+    }
+
+    #overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    #status-bar {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-top: 10px; align-items: center;
+    }
+    .badge {
+      font-size: 12px; padding: 3px 10px; border-radius: 6px;
+      font-weight: 500;
+    }
+    .badge-blue   { background: #1d4ed8; }
+    .badge-green  { background: #15803d; }
+    .badge-yellow { background: #a16207; }
+    .badge-gray   { background: #374151; }
+
+    #timeline { margin-top: 1.5rem; display: none; }
+    #timeline h2 { font-size: 0.85rem; color: #888; margin-bottom: .5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 6px 8px; color: #888; border-bottom: 1px solid #333; }
+    td { padding: 6px 8px; border-bottom: 1px solid #1f1f1f; }
+    tr:hover td { background: #1a1a1a; }
+
+    #loading { display: none; text-align: center; padding: 2rem; color: #888; }
+    .spinner {
+      width: 32px; height: 32px; margin: 0 auto 1rem;
+      border: 3px solid #333; border-top-color: #fff;
+      border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-mark">VAR</div>
-  <div class="header-text">
-    <h1>Volleyball Activity Recognizer</h1>
-    <p>B8_Group · ResNet50 + Dual LSTM · 8 activities</p>
-  </div>
-</header>
+<h1>Volleyball activity recognizer</h1>
 
-<div style="width:100%;max-width:900px">
-  <div id="drop-zone">
-    <p>Drop video here or <strong>click to browse</strong></p>
-    <p style="margin-top:4px;font-size:11px">MP4 · AVI · MOV · MKV</p>
-  </div>
-  <input type="file" id="file-input" accept=".mp4,.avi,.mov,.mkv"/>
-  <div id="file-name"></div>
-  <div id="error-msg"></div>
+<div id="upload-zone" onclick="document.getElementById('file-input').click()">
+  <svg width="40" height="40" fill="none" stroke="#666" stroke-width="1.5"
+       viewBox="0 0 24 24" style="margin:0 auto">
+    <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 12V4M8 8l4-4 4 4"/>
+  </svg>
+  <p>Click to upload a video (.mp4 .avi .mov .mkv)</p>
+  <input type="file" id="file-input" accept="video/*" style="display:none" />
 </div>
 
-<div class="layout">
-  <!-- video -->
-  <div class="video-card">
-    <video id="preview" controls muted playsinline></video>
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Analyzing video…</p>
+</div>
+
+<div id="player-wrap">
+  <div class="video-container">
+    <video id="vid" controls playsinline></video>
+    <canvas id="overlay"></canvas>
   </div>
 
-  <!-- right col -->
-  <div class="right-col">
-    <!-- analyse button -->
-    <button class="btn btn-blue" id="submit-btn" disabled>
-      <span class="spinner" id="spinner"></span>
-      <span id="btn-text">Analyse video</span>
-    </button>
-
-    <!-- current activity -->
-    <div class="card">
-      <div class="eyebrow">Current Activity</div>
-      <div class="activity-display">
-        <div class="team-badge none" id="team-badge">--</div>
-        <div id="activity-name">--</div>
-      </div>
-      <div class="conf-row">
-        <div class="conf-track"><div id="conf-fill"></div></div>
-        <div id="conf-pct">--%</div>
-      </div>
-    </div>
-
-    <!-- timeline -->
-    <div class="card" id="timeline-card" style="display:none">
-      <div class="eyebrow">Timeline</div>
-      <div id="timeline-wrap"></div>
-    </div>
+  <div id="status-bar">
+    <span class="badge badge-blue"  id="b-frame">Frame —</span>
+    <span class="badge badge-green" id="b-label">—</span>
+    <span class="badge badge-yellow" id="b-conf">conf —</span>
+    <span class="badge badge-gray"  id="b-persons">0 players</span>
   </div>
 </div>
 
-<video id="vid" style="display:none" playsinline></video>
+<div id="timeline">
+  <h2>Timeline</h2>
+  <table>
+    <thead><tr><th>Start</th><th>End</th><th>Label</th><th>Confidence</th></tr></thead>
+    <tbody id="timeline-body"></tbody>
+  </table>
+</div>
 
 <script>
-const API = 'http://localhost:8000';
+  const API = 'http://localhost:8000';
 
-const dropZone   = document.getElementById('drop-zone');
-const fileInput  = document.getElementById('file-input');
-const fileNameEl = document.getElementById('file-name');
-const preview    = document.getElementById('preview');
-const submitBtn  = document.getElementById('submit-btn');
-const btnText    = document.getElementById('btn-text');
-const spinner    = document.getElementById('spinner');
-const errorMsg   = document.getElementById('error-msg');
-const timelineCard = document.getElementById('timeline-card');
-const timelineWrap = document.getElementById('timeline-wrap');
+  const vid  = document.getElementById('vid');
+  const canvas = document.getElementById('overlay');
+  const ctx = canvas.getContext('2d');
 
-const GROUP_LABELS = {
-  'l-pass':     { team: 'left',  display: 'Pass' },
-  'r-pass':     { team: 'right', display: 'Pass' },
-  'l-spike':    { team: 'left',  display: 'Spike' },
-  'r-spike':    { team: 'right', display: 'Spike' },
-  'l-set':      { team: 'left',  display: 'Set' },
-  'r-set':      { team: 'right', display: 'Set' },
-  'l-winpoint': { team: 'win',   display: 'Win Point' },
-  'r-winpoint': { team: 'win',   display: 'Win Point' },
-};
+  let frameData = [];
+  let effectiveFps = 30;
 
-let selectedFile = null;
-let timeline     = [];
+  // ── file upload ────────────────────────────────────────────────────────────
+  document.getElementById('file-input').addEventListener('change', async e => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-function teamColor(team) {
-  return team === 'left' ? 'var(--left)' : team === 'right' ? 'var(--right)' : 'var(--neutral)';
-}
+    vid.src = URL.createObjectURL(file);
+    document.getElementById('upload-zone').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
 
-function showError(msg) { errorMsg.textContent = msg; errorMsg.style.display = 'block'; }
-function clearError()   { errorMsg.style.display = 'none'; }
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      const res = await fetch(`${API}/predict`, { method: 'POST', body: form });
+      const json = await res.json();
 
-function setLoading(on) {
-  submitBtn.disabled  = on || !selectedFile;
-  spinner.style.display = on ? 'block' : 'none';
-  btnText.textContent = on ? 'Processing…' : 'Analyse video';
-}
+      if (json.error) { alert(json.error); return; }
 
-function loadFile(file) {
-  if (!file || !file.name.match(/\.(mp4|avi|mov|mkv)$/i)) {
-    showError('Unsupported file type.'); return;
-  }
-  clearError();
-  selectedFile = file;
-  fileNameEl.textContent = file.name;
-  preview.src = URL.createObjectURL(file);
-  timelineCard.style.display = 'none';
-  timelineWrap.innerHTML = '';
-  timeline = [];
-  submitBtn.disabled = false;
-  updateActivity(null, 0);
-}
+      frameData = json.frames ?? [];
+      effectiveFps = json.effective_fps ?? 10;
 
-function updateActivity(label, conf) {
-  const info  = label ? (GROUP_LABELS[label] || { team: 'none', display: label }) : null;
-  const badge = document.getElementById('team-badge');
-  const nameEl = document.getElementById('activity-name');
-  const fill  = document.getElementById('conf-fill');
-  const pctEl = document.getElementById('conf-pct');
+      buildTimeline(json.timeline ?? []);
 
-  if (!info) {
-    badge.textContent = '--'; badge.className = 'team-badge none';
-    nameEl.textContent = '--';
-    fill.style.width = '0%'; pctEl.textContent = '--%';
-    return;
-  }
-  const pct = Math.round(conf * 100);
-  badge.textContent = info.team === 'win' ? 'WIN' : info.team.toUpperCase();
-  badge.className   = `team-badge ${info.team}`;
-  nameEl.textContent = info.display;
-  fill.style.width    = pct + '%';
-  fill.style.background = teamColor(info.team);
-  pctEl.textContent   = pct + '%';
-}
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('player-wrap').style.display = 'block';
+      document.getElementById('timeline').style.display = 'block';
 
-function buildTimeline(data) {
-  timeline = data;
-  timelineWrap.innerHTML = '';
-
-  if (!data.length) {
-    timelineWrap.innerHTML = '<p style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">Video too short.</p>';
-    timelineCard.style.display = 'block';
-    return;
-  }
-
-  // dominant label for summary
-  const counts = {};
-  data.forEach(r => counts[r.label] = (counts[r.label] || 0) + 1);
-  const dominant = Object.entries(counts).sort((a,b) => b[1]-a[1])[0][0];
-  updateActivity(dominant, data.find(r => r.label === dominant).confidence);
-
-  data.forEach((row, i) => {
-    const info  = GROUP_LABELS[row.label] || { team: 'none' };
-    const color = teamColor(info.team);
-    const pct   = Math.round(row.confidence * 100);
-
-    const el = document.createElement('div');
-    el.className = 'trow';
-    el.dataset.index = i;
-    el.innerHTML = `
-      <span class="ts">${row.start}–${row.end}</span>
-      <span class="lbl" style="color:${color}">${row.label}</span>
-      <div class="bar"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
-      <span class="pct">${pct}%</span>`;
-
-    el.addEventListener('click', () => {
-      preview.currentTime = row.start_sec;
-      preview.play();
-    });
-
-    timelineWrap.appendChild(el);
-  });
-
-  timelineCard.style.display = 'block';
-  syncTimeline();
-}
-
-function syncTimeline() {
-  preview.addEventListener('timeupdate', () => {
-    const t    = preview.currentTime;
-    const rows = timelineWrap.querySelectorAll('.trow');
-
-    let activeIdx = -1;
-    timeline.forEach((entry, i) => {
-      if (t >= entry.start_sec && t < entry.end_sec) activeIdx = i;
-    });
-
-    rows.forEach((row, i) => {
-      const wasActive = row.classList.contains('active');
-      const isActive  = i === activeIdx;
-      row.classList.toggle('active', isActive);
-
-      if (isActive && !wasActive) {
-        updateActivity(timeline[i].label, timeline[i].confidence);
-        row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-    });
-  });
-}
-
-// drag and drop
-dropZone.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', e => { if (e.target.files[0]) loadFile(e.target.files[0]); });
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', e => {
-  e.preventDefault(); dropZone.classList.remove('drag-over');
-  if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
-});
-
-// submit
-submitBtn.addEventListener('click', async () => {
-  if (!selectedFile) return;
-  clearError(); setLoading(true);
-  timelineCard.style.display = 'none';
-
-  const form = new FormData();
-  form.append('file', selectedFile);
-
-  try {
-    const res = await fetch(`${API}/predict`, { method: 'POST', body: form });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || `Server error ${res.status}`);
+    } catch (err) {
+      alert('Request failed: ' + err.message);
+      document.getElementById('loading').style.display = 'none';
     }
-    const data = await res.json();
-    buildTimeline(data.timeline);
-  } catch(e) {
-    showError(e.message || 'Could not reach API.');
-  } finally {
-    setLoading(false);
+  });
+
+  function syncCanvas() {
+    canvas.width  = vid.videoWidth || 640;
+    canvas.height = vid.videoHeight || 360;
   }
-});
+  vid.addEventListener('loadedmetadata', syncCanvas);
+  window.addEventListener('resize', () => {
+    // re-sync on resize so scaling is correct
+    syncCanvas();
+  });
+
+  function drawFrame(data) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (!data) return;
+
+    const detections  = data.detections  ?? [];
+    const persons = data.persons ?? [];
+    const groupLabel = data.group_label;
+    const groupConf = data.group_conf;
+
+
+    const actionMap = {};
+    persons.forEach(p => { actionMap[p.player_id] = p; });
+
+    detections.forEach((det, i) => {
+      const [x1, y1, x2, y2] = det.box;
+      const isPerson = det.label === 'person';
+      const color    = isPerson ? '#22c55e' : '#f59e0b';
+
+      // bounding box
+      ctx.strokeStyle = color;
+      ctx.lineWidth   = 2;
+      ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+
+
+      const personInfo = actionMap[i];
+      let tag = isPerson
+        ? `P${i}` +
+          (personInfo?.action_label ? `  ${personInfo.action_label}` : '') +
+          `  ${(det.confidence * 100).toFixed(0)}%`
+        : `${det.label}  ${(det.confidence * 100).toFixed(0)}%`;
+
+      ctx.font = 'bold 12px sans-serif';
+      const tw = ctx.measureText(tag).width + 8;
+
+
+      ctx.fillStyle = color;
+      ctx.fillRect(x1, y1 - 20, tw, 20);
+
+
+      ctx.fillStyle = '#fff';
+      ctx.fillText(tag, x1 + 4, y1 - 5);
+    });
+
+
+    if (groupLabel) {
+      const text = `${groupLabel}  (${(groupConf * 100).toFixed(1)}%)`;
+      ctx.font = 'bold 14px sans-serif';
+      const tw = ctx.measureText(text).width + 16;
+      ctx.fillStyle = 'rgba(0,0,0,0.65)';
+      ctx.fillRect(8, 8, tw, 34);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(text, 16, 30);
+    }
+
+
+    document.getElementById('b-frame').textContent   = `Frame ${data.frame_idx}`;
+    document.getElementById('b-label').textContent   = groupLabel ?? '—';
+    document.getElementById('b-conf').textContent    = groupConf
+      ? `conf ${(groupConf * 100).toFixed(1)}%` : 'conf —';
+    document.getElementById('b-persons').textContent =
+      `${detections.filter(d => d.label === 'person').length} players`;
+  }
+
+
+  vid.addEventListener('timeupdate', () => {
+    const frameIdx = Math.floor(vid.currentTime * effectiveFps);
+    drawFrame(frameData[frameIdx]);
+  });
+
+
+  function buildTimeline(timeline) {
+    const tbody = document.getElementById('timeline-body');
+    tbody.innerHTML = '';
+    timeline.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${row.start}</td>
+        <td>${row.end}</td>
+        <td>${row.label}</td>
+        <td>${(row.confidence * 100).toFixed(1)}%</td>
+      `;
+      // clicking a row seeks the video to that timestamp
+      tr.style.cursor = 'pointer';
+      tr.addEventListener('click', () => { vid.currentTime = row.start_sec; });
+      tbody.appendChild(tr);
+    });
+  }
 </script>
 </body>
 </html>
